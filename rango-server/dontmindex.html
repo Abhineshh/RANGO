@@ -1,0 +1,36 @@
+<!-- index.html (Client-side) -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Client</title>
+</head>
+<body>
+  <h1>Client Application</h1>
+  <button onclick="sendData()">Send Data to Server</button>
+  <script>
+    function sendData() {
+      const requestData = {
+        key1: 'value1',
+        key2: 'value2'
+      };
+
+      fetch('/api/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response received from the server
+        console.log('Received response from server:', data);
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</body>
+</html>

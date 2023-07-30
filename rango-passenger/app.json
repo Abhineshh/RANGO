@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "rango-passenger",
+    "slug": "rango-passenger",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "rango-passenger"
+}
