@@ -1,23 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import Login from './pages/Login';
+//import Signup from './pages/signup';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working oksfjlksdjfk
-        asjfdlksjf
-        sdkfjlskjf
-        kdjf;laksn your app!</Text>
-      <StatusBar style="auto" />
-      <Text>i am ultra legend</Text>
-      <ScrollView style={styles.jar}>
-        <View>
-          <Text>
-            ding ding
-          </Text>
-        </View>
-      </ScrollView>
+      <Login/>
     </View>
   );
 }
@@ -31,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   jar :{
-    backgroundColor:'#000',
+    backgroundColor:'rgb(255,255,255)',
     width:'90%',
   },
 });
