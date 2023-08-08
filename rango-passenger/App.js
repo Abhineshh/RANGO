@@ -1,27 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import PassengerOrDriver from './pages/PassengerOrDriver';
 import Login from './pages/Login';
-//import Signup from './pages/signup';
+import Signup from './pages/Signup';
+import Chooser from './pages/Chooser';
+import Loading from './components/Loading';
 
 export default function App() {
+
+
+
+
   return (
-    <View style={styles.container}>
-      <Login/>
-    </View>
+    <ScrollView style={styles.container}>
+      <Loading/>
+      <Login />
+      <Chooser/>
+      <Signup/>
+      <PassengerOrDriver/>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection:'column',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  jar :{
-    backgroundColor:'rgb(255,255,255)',
-    width:'90%',
-  },
+    container:{
+      margin :'1%',
+    },
 });

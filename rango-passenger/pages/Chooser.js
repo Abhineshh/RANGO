@@ -1,24 +1,20 @@
 import React from 'react';
-import {Text,View,TextInput,Button,StyleSheet} from 'react-native';
-
-const Login = function(){
+import {Text,View,TextInput,Button,StyleSheet,MapView} from 'react-native';
+import Choosdest from '../components/Choosdest';
+import ChooserPick from '../components/ChooserPick';
+const Chooser = function(){
 
     return(
-        <View style={styles.container}>
-           <Text>Choose Pickup and Destination</Text>
-           <View>
-            <Text>Enter Pickup Location</Text>
-            <TextInput>pickup</TextInput>
-           <TextInput>PickUP</TextInput>
-           </View>
+        <View>
+            <Choosdest />
+             <ChooserPick/>
+            
+            <Button title="Search Ride"
+            color="#841584"
+            />
         </View>
     );
 }
 
-const styles = StyleSheet.create({
-container:{
-    backgroundColor:'#fff',
-}
-});
 
-export default Login;
+export default Chooser;
