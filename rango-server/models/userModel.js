@@ -23,15 +23,7 @@ const userSchema = new mongoose.Schema({
     type:String,
     required:true,
   },
-  isAvatarImageSet: {
-    type: Boolean,
-    default: false,
-  },
-  avatarImage: {
-    type: String,
-    default: "",
-  },
-  userPhoneNumber:{
+  UserPhoneNumber:{
     type:Number,
     min:10,
     max:10,

@@ -25,15 +25,6 @@ const driverSchema = new mongoose.Schema({
   },
   carDetails:{
     type:String,
-    
-  },
-  isAvatarImageSet: {
-    type: Boolean,
-    default: false,
-  },
-  avatarImage: {
-    type: String,
-    default: "",
   },
   driverPhoneNumber:{
     type:Number,
