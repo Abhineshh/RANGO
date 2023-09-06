@@ -1,46 +1,23 @@
 import React from 'react';
-import {SafeAreaView,ScrollView,StatusBar,StyleSheet,Text,View} from 'react-native';
-import MapView, { PROVIDER_GOOGLE,Marker} from 'react-native-maps';
+import {View,SafeAreaView} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import InitDriver from './driverScreens/initDriver';
+import InitPassenger from './passengerScreens/initPassenger';
+import Role from './role';
+
+const Stack = createNativeStackNavigator();
 
 function App(){
- 
-  return (
-    <SafeAreaView>
-      <StatusBar />
-     <View style={styles.container}>
-     <MapView
-       provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-       style={styles.map}
-       initialRegion={{
-         latitude: 37.78825,
-         longitude: -122.4324,
-         latitudeDelta: 0.015,
-         longitudeDelta: 0.0121,
-       }}
-       >
-        <Marker coordinate={{
-           latitude: 37.78825,
-         longitude: -122.4324,
-         latitudeDelta: 0.015,
-         longitudeDelta: 0.0121,
-        }}/>
-     </MapView>
-   </View>
-    </SafeAreaView>
+  return(
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Role">
+          <Stack.Screen component={Role} name="Role"  options={{ headerShown: false }}/>
+          <Stack.Screen component={InitPassenger} name="InitPassenger"  options={{ headerShown: false }}/>
+          <Stack.Screen component={InitDriver} name="InitDriver" options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-   container: {
-   ...StyleSheet.absoluteFillObject,
-   height: 760,
-   width: 400,
-   justifyContent: 'flex-end',
-   alignItems: 'center',
- },
- map: {
-   ...StyleSheet.absoluteFillObject,
- },
-});
 
 export default App;

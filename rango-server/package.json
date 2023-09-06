@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Abhinesh",
@@ -16,5 +16,9 @@
     "express": "^4.18.2",
     "mongoose": "^7.4.1",
     "socket.io": "^4.7.2"
+  },
+  "proxy": "http://localhost:8081",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

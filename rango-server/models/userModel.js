@@ -1,34 +1,28 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  userName: {
+const riderSchema = new mongoose.Schema({
+  riderName: {
     type: String,
     required: true,
     min: 3,
     max: 20,
     unique: true,
   },
-  userEmail: {
+  riderEmail: {
     type: String,
     required: true,
     unique: true,
     max: 50,
   },
-  userPassword: {
+  riderPassword: {
     type: String,
     required: true,
     min: 8,
   },
-  userId:{
+  riderId:{
     type:String,
     required:true,
   },
-  UserPhoneNumber:{
-    type:Number,
-    min:10,
-    max:10,
-    unique:true,
-  },
 });
 
-module.exports = mongoose.model("Users", userSchema);
+module.exports = mongoose.model("Rider", riderSchema);

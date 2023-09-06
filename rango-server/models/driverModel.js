@@ -21,17 +21,8 @@ const driverSchema = new mongoose.Schema({
   },
   driverId:{
     type:String,
-    required:ttuel
-  },
-  carDetails:{
-    type:String,
-  },
-  driverPhoneNumber:{
-    type:Number,
-    min:10,
-    max:10,
-    unique:true,
+    required:true,
   },
 });
 
-module.exports = mongoose.model("Drivers", driverSchema);
+module.exports = mongoose.model("Driver", driverSchema);
