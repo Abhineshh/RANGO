@@ -1,36 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
     StyleSheet,
+    Alert,
     Text,
-    useColorScheme,
     View,
     TextInput,
     TouchableOpacity,
 } from 'react-native';
-import {
-    Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios';
 import Passenger from './Driver';
 import Passengersignup from './Driversignup';
 import { driverloginRoute } from '../APIroutes';
 
 const Driverlogin = function ({ navigation }) {
-    const [Driver, setDriver] = useState({ Email: "", password: "", signedIn: false });
+    const [Driver, setDriver] = useState({ Email: "", password: ""});
+
+     const handleValidation= () => {
+        const { email, password} = Driver;
+        if (password === "") {
+            Alert.alert("Email and Password is required.");
+            return false;
+        } else if(email === ""){
+            Alert.alert("Email and Password is required.");
+            return false;
+        }
+        return true;
+    };
+
+    function navigating(){
+        navigation.navigate('Driver');
+    }
+
 
        async function gettheDriver(){
             try{
+                if(handleValidation()){
                 const useeer = await axios.post(driverloginRoute,Driver)
                 console.log(useeer.status , 'was the response status \n' );
-            }catch(err){console.log(err)}
+                  if(useeer.data.status=== false){
+                    Alert.alert(`couldn't login`);
+                }
+                if(useeer.data.status === true){
+                   
+                    navigating();
+                }
+                }
+        }catch(e){
+            console.log(e);
         }
+       }
 
     return (
         <View style={styles.container}>
@@ -58,7 +76,7 @@ const Driverlogin = function ({ navigation }) {
             </View>
 
             <TouchableOpacity
-                onPress={() => {navigation.navigate('Driver')}}
+                onPress={() => {gettheDriver()}}
                 style={styles.loginBtn}>
                 <Text style={styles.loginText}>LOGIN </Text>
             </TouchableOpacity>

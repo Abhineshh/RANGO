@@ -1,11 +1,8 @@
 import React,{useState,useEffect} from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
     StyleSheet,
+    Alert,
     Text,
-    useColorScheme,
     View,
     TextInput,
     TouchableOpacity,
@@ -31,11 +28,36 @@ const Driversignup= function({navigation}){
         password:"",
     }); 
    
+     const handleValidation= () => {
+        const { username, email, password} = Driver;
+        if (username === "") {
+            Alert.alert("Email and Password is required.");
+            return false;
+        } else if (password === "") {
+            Alert.alert("Email and Password is required.");
+            return false;
+        } else if(email === ""){
+            Alert.alert("Email and Password is required.");
+            return false;
+        }
+        return true;
+    };
+
+     function navigating(){
+        navigation.navigate('Driver');
+    }
+
        async function settheDriver(){
-            try{
+            if(handleValidation()){            
                 const useeer = await axios.post(driversignupRoute,Driver)
                 console.log(useeer.status , 'was the response status \n' );
-            }catch(err){console.log(err)}
+                if(useeer.data.status === false){
+                    Alert.alert('the emailid or password is alreaddy used')
+                }
+                if(useeer.data.status === true){
+                    navigating();
+                }
+            } 
         }
    
 

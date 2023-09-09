@@ -19,10 +19,7 @@ const riderSchema = new mongoose.Schema({
     required: true,
     min: 8,
   },
-  riderId:{
-    type:String,
-    required:true,
-  },
+ 
 });
 
 module.exports = mongoose.model("Rider", riderSchema);

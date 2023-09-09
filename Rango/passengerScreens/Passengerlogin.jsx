@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useContext} from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -21,49 +21,64 @@ import {
 import Passenger from './Passenger';
 import Passengersignup from './Passengersignup';
 import axios from 'axios';
-import { passengerloginRoute, server } from '../APIroutes';
-
+import { passengerloginRoute} from '../APIroutes';
+import { CurrentUserContext } from './authContextProvider';
 
 //component
 const Passengerlogin = function ({ navigation }) {
+   const {CurrentUser , setUserEmail} = useContext(CurrentUserContext);
+    const changeHandler = () =>{ 
+        console.log('the current user is ', CurrentUser);
+        setUserEmail(User.email)};
+
+
     const [User, setUser] = useState({
         email: '',
         password: '',
     });
 
-    
-  const validateForm = () => {
-    const { username, password } = User;
-    if (username === "") {
-      toast.error("Email and Password is required.", toastOptions);
-      return false;
-    } else if (password === "") {
-      toast.error("Email and Password is required.", toastOptions);
-      return false;
+
+    const handleValidation= () => {
+        const { email, password} = User;
+        if (password === "") {
+            Alert.alert("Email and Password is required.");
+            return false;
+        } else if(email === ""){
+            Alert.alert("Email and Password is required.");
+            return false;
+        }
+        return true;
+    };
+
+    function navigating(){
+        navigation.navigate('Passenger');
     }
-    return true;
-  };
+
 
 
     async function gettheUser() {
-       
-            let val = validateForm();
-            if(val){
-                 try {
-            const useeer = await axios.post(passengerloginRoute, User)
-            console.log(useeer.status, 'was the response status \n');
-                 } catch (err) { console.log(err) };
-
-            navigation.navigate('Chooser');
-
+        try{
+        if (handleValidation()) {
+            console.log(User)
+                const useeer= await axios.post(passengerloginRoute,User);
+                console.log(useeer.data, 'was the response status \n');
+                if(useeer.data.status=== false){
+                    Alert.alert(`couldn't login`);
+                }
+                if(useeer.data.status === true){
+                    changeHandler();
+                    navigating();
+                }
             }
-            
-    }
+        }catch(e){
+            console.log(e)
+        } 
+        }
 
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>RIDER LOG-IN</Text>
+            <Text style={styles.title} >RIDER LOG-IN</Text>
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.inputText}
@@ -85,14 +100,14 @@ const Passengerlogin = function ({ navigation }) {
                         setUser({ ...User })
                     }} />
             </View>
-             
+
             <TouchableOpacity
-                onPress={() => { navigation.navigate('Passenger')}}
+                onPress={()=>{gettheUser()}}
                 style={styles.loginBtn}>
                 <Text style={styles.loginText}>LOGIN </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => { navigation.navigate('Passengersignup') }}>
+                onPress={() => { navigation.navigate('Passengersignup')}}>
                 <Text style={styles.forgotAndSignUpText}>No Account then Signup</Text>
             </TouchableOpacity>
         </View>

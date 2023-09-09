@@ -12,26 +12,15 @@ const ChooserMap = () => {
 
   const handleMarkerDragEnd = (event) => {
     const { geometry } = event.features[0];
-    console.log(evnet);
     setselectedLocation(geometry.coordinates)
   }
 
   return (
     <View style={styles.page}>
       <View style={styles.container}>
-        {/* <Mapbox.MapView style={styles.map} />
-        <Camera ref={camera} zoomLevel={14}/> */}
-        <Mapbox.MapView style={{ flex: 1 }}>
-          <Mapbox.Camera zoomLevel={14} centerCoordinate={[77.5946, 12.9716]} />
-          {markerCoordinates && (
-            <Mapbox.MarkerView
-              id="marker-id"
-              coordinate={markerCoordinates}
-              draggable={true}
-              onDragEnd={(e)=>{handleMarkerDragEnd(e)}}
-            />
-          )}
-        </Mapbox.MapView>
+         <Mapbox.MapView style={styles.map}
+          MarkerView coordinate={[77.5946,12.9716]}
+          /> 
       </View>
     </View>
   );

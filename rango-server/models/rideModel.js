@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 
 const rideSchema = new mongoose.Schema({
-    riderId: {
-        type: String,
+    riderEmail: {
+        type: mongoose.Schema.Types.ObjectId, // rango passenger
+        ref: 'Rider',
         required: true,
     },
-    driverId: {
-        type: String,
+    driverEmail: {
+        type: mongoose.Schema.Types.ObjectId, //rango driver
+        ref: 'Driver',
         required: true,
     },
     rangoId: {
@@ -22,21 +24,21 @@ const rideSchema = new mongoose.Schema({
         required: true,
     },
     sotp: {
+        type: Number,  // start time otp
+        min: 4,
+        max: 4,
+    },
+    eotp: { // start time otp
         type: Number,
         min: 4,
         max: 4,
     },
-    eotp: {
-        type: Number,
-        min: 4,
-        max: 4,
-    },
-    pickupLocation: {
-        type: String,
+    pickupLocation: { //pickup Coordinates
+        type: Array,
         required: true,
     },
-    destinationLocation: {
-        type: String,
+    destinationLocation: { // destination Coordinates
+        type: Array,
         required: true,
     },
 

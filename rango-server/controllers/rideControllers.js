@@ -1,10 +1,23 @@
-const Ride = require('../models/rideModel');
+const Ride = require("../models/rideModel");
 
 
 module.exports.Chooser = async(req,res,next) =>{
     try{
-
+        console.log(req.body);
         console.log('ding ding');
+        const pickup = req.body.pickup;
+        const destination = req.body.destination;
+        const tour = await Ride.create({
+            riderEmail:"",
+            driverEmail:"",
+            rangoId:43,
+            rideStart: '',
+            rideEnd:"",
+            sotp:8907,
+            eotp:7654,
+            pickup,
+            destination,
+        });
     }catch(err){
         console.log('chooserRouter: ',err)
     }

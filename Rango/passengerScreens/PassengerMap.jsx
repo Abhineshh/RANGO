@@ -20,12 +20,11 @@ export default PassengerMap;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   container: {
-    height: 300,
-    width: 300,
+    height: '90%',
+    width: '90%',
   },
   map: {
     flex: 1

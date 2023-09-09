@@ -19,10 +19,6 @@ const driverSchema = new mongoose.Schema({
     required: true,
     min: 8,
   },
-  driverId:{
-    type:String,
-    required:true,
-  },
 });
 
 module.exports = mongoose.model("Driver", driverSchema);

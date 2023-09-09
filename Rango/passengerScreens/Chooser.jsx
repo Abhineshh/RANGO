@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { MAPBOX_API_KEY } from '../config';
 import axios from 'axios';
 import { ChooserRoute } from '../APIroutes';
+import { CurrentUserContext } from './authContextProvider';
 
 
 
@@ -26,65 +27,121 @@ const searchPlaces = async (query) => {
 
 
 const Chooser = function ({ navigation }) {
-    const [pickup, setpickup] = useState({
-        Pname: '',
-        lat: '',
-        long: '',
-    });
-    const [Destination, setDestination] = useState({
-        lat: '',
-        long: '',
-    });
+    const { CurrentUser, setUserEmail } = useContext(CurrentUserContext);
+    const changeHandler = () => {
+        setUserEmail(User.email)
+        console.log('the current user is ', CurrentUser);
 
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-
-    const handleSearch = async () => {
-        const results = await searchPlaces(searchQuery);
-        setSearchResults(results);
     };
 
-    let searchData = new Array( searchResults);
+    const [pickup, setpickup] = useState([]);
+    const [Destination, setDestination] = useState([]);
 
+    const [searchQueryPick, setSearchQueryPick] = useState('');
+    const [searchQueryDest, setsearchQueryDest] = useState('');
+    const [searchResultsPick, setSearchResultsPick] = useState([]);
+    const [searchResultsDest, setSearchResultsDest] = useState([]);
+
+    const handleSearchPickup = async () => {
+        const results = await searchPlaces(searchQueryPick);
+
+        const thepoint = results.map((ding) => {
+            const coord = ding['center']
+            const placename = ding['place_name']
+            return { coord, placename };
+        })
+        setSearchResultsPick(thepoint);
+        console.log('the pickup list \n', thepoint)
+
+
+    };
+    const handleSearchDest = async () => {
+        const results = await searchPlaces(searchQueryDest);
+        const thepoint = results.map((ding) => {
+            const coord = ding['center']
+            const placename = ding['place_name']
+            return { coord, placename };
+        })
+        setSearchResultsDest(thepoint);
+        console.log('the destination list \n', thepoint)
+
+    };
+
+     function navigating(){
+        navigation.navigate('PassengerHome');
+    }
+
+    const RideInitiator = async () => {
+        console.log(pickup," ",Destination);
+        const ridinator = await axios.post(ChooserRoute,{
+
+            pickup,
+            Destination,
+
+        });
+        if(ridinator.data.status=== false){
+            Alert.alert(`couldn't process the data try again`)
+        }
+        if(ridinator.data.status === true){
+            navigating();
+        }
+    }
 
     return (
         <View style={styles.container}>
+            <Text>{CurrentUser}</Text>
             <Text style={styles.title}>Choose PickUp and Destination</Text>
-            <View>
-                <TextInput
-                    placeholder="Search for places"
-                    value={searchQuery}
-                    onChangeText={(text) => setSearchQuery(text)}
-                    onBlur={handleSearch}
-                />
-                <FlatList
-                    data={searchResults}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <Text>{item.place_name}</Text>
-                    )}
-                />
+            <View style={styles.place}>
+                <View style={styles.inputView}>
+                    <TextInput
+                        placeholder="Search for Pickup Location"
+                        value={searchQueryPick}
+                        onChangeText={(text) => setSearchQueryPick(text)}
+                        onBlur={handleSearchPickup}
+                        style={styles.inputText}
+                    />
+                </View>
+                <View>{
+                    searchResultsPick.map((searchResultsPick, index) => {
+                        return (
+                            <TouchableOpacity
+                                key={index}
+                                onPress={() => {setpickup(searchResultsPick.coord);console.log(searchResultsPick.placename) }}>
+
+                                <Text style={styles.loginText}>{searchResultsPick.placename}</Text>
+                            </TouchableOpacity>)
+                    })
+                }
+                </View>
             </View>
-            {
-                searchData.forEach((searchData, index) => {
-                    return (
-                        <View style={styles.card} key={index} onPress={() => { 'PassengerHome' }}>
-                            <Text>{searchData} </Text>
-                            <Text>{index}</Text>
-                            <Button title={"i am ready for this ride"} onPress={() => { navigation.navigate('DriverHome') }} />
-                        </View>
-                    )
-                })
-            }
+            <View style={styles.place}>
+                <View style={styles.inputView}>
+                    <TextInput
+                        placeholder="Search for Destination"
+                        value={searchQueryDest}
+                        onChangeText={(text) => setsearchQueryDest(text)}
+                        onBlur={handleSearchDest}
+                        style={styles.inputText}
+                    />
+                </View>
+                <View>
+                  {
+                    searchResultsDest.map((searchResultsDest, index) => {
+                        return (
+                            <TouchableOpacity
+                                key={index}
+                                onPress={() => {setDestination(searchResultsDest.coord);console.log(searchResultsDest.placename) }}>
+
+                                <Text style={styles.loginText}>{searchResultsDest.placename}</Text>
+                            </TouchableOpacity>)
+                    })
+                }
+                </View>
+            </View>
 
 
             <TouchableOpacity
-                onPress={() => { navigation.navigate('ChooserMap') }}
-                style={styles.loginBtn}>
-                <Text style={styles.loginText}>Choose on Map </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() => { navigation.navigate('PassengerHome') }}
+                onPress={() => { RideInitiator()}}
                 style={styles.loginBtn}>
                 <Text style={styles.loginText}>Let's Ride</Text>
             </TouchableOpacity>
@@ -94,11 +151,18 @@ const Chooser = function ({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#BBB',
         alignItems: 'center',
+        backgroundColor: '#BBB',
+        justifyContent: 'center',
 
     },
+    place: {
+        widht: '100%',
+        alignItems: 'center',
+        height: '30%',
+        justifyContent: 'center',
+    }
+    ,
     inputText: {
         height: 50,
         color: "white"
@@ -121,13 +185,14 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     inputView: {
-        width: "80%",
+        width: "100%",
         backgroundColor: "#888",
         borderRadius: 25,
         height: 50,
         marginBottom: 20,
         justifyContent: "center",
-        padding: 20
+        padding: 20,
+        fontSize: 26,
     },
 });
 

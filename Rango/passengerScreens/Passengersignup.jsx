@@ -1,62 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useContext} from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
     StyleSheet,
     Text,
-    useColorScheme,
     View,
     TextInput,
     TouchableOpacity,
+    Alert,
 } from 'react-native';
-import {
-    Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 import axios from 'axios';
-import Passenger from './Passenger';
 import { passengersignupRoute } from '../APIroutes';
+import { CurrentUserContext } from './authContextProvider';
+
 
 const Passengersignup = function ({ navigation }) {
+     const {CurrentUser , setUserEmail} = useContext(CurrentUserContext);
+    const changeHandler = () =>{ 
+        console.log('the current user is ', CurrentUser);
+        setUserEmail(User.email)};
+
+
     const [User, setUser] = useState({
         name: "",
         email: "",
         password: "",
     });
 
-           async function settheUser(){
-            try{
-                const useeer = await axios.post(passengersignupRoute,User)
-                console.log(useeer.status , 'was the response status \n' );
-            }catch(err){console.log(err)}
+    const handleValidation= () => {
+        const { username, email, password} = User;
+        if (username === "") {
+            Alert.alert("Email and Password is required.");
+            return false;
+        } else if (password === "") {
+            Alert.alert("Email and Password is required.");
+            return false;
+        } else if(email === ""){
+            Alert.alert("Email and Password is required.");
+            return false;
         }
-    
+        return true;
+    };
 
+    function navigating(){
+        navigation.navigate('Passenger');
+    }
+
+    async function settheUser() {
+        console.log(User);
+        if (handleValidation()) {
+      const { username,email,password } = User;
+      const dataa = await axios.post(passengersignupRoute, User );
+      
+        console.log(dataa)
+      if (dataa.data.status === false) {
+       Alert.alert(`couldn't login`);
+      }
+      if( dataa.data.status === true) {
+        changeHandler();
+        navigating();
+      }
+    }
+    }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>RIDER SIGN-UP</Text>
-             <View style={styles.inputView}>
+            <View style={styles.inputView}>
                 <TextInput
                     style={styles.inputText}
                     placeholder="name"
                     placeholderTextColor="#003f5c"
-                    onChangeText={text =>{
-                        User.name= text
-                         setUser({ ...User })}} />
+                    onChangeText={text => {
+                        User.name = text
+                        setUser({ ...User })
+                    }} />
             </View>
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.inputText}
                     placeholder="Email"
                     placeholderTextColor="#003f5c"
-                    onChangeText={text =>{ 
+                    onChangeText={text => {
                         User.email = text
-                        setUser({ ...User})}} />
+                        setUser({ ...User })
+                    }} />
             </View>
             <View style={styles.inputView}>
                 <TextInput
@@ -64,18 +90,19 @@ const Passengersignup = function ({ navigation }) {
                     secureTextEntry
                     placeholder="Password"
                     placeholderTextColor="#003f5c"
-                    onChangeText={text =>{
+                    onChangeText={text => {
                         User.password = text
-                         setUser({ ...User })}} />
+                        setUser({ ...User })
+                    }} />
             </View>
-          
+
             <TouchableOpacity
-                onPress={(e)=>{settheUser()}}
+                onPress={(e) => { settheUser() }}
                 style={styles.loginBtn}>
-                <Text style={styles.loginText}>LOGIN </Text>
+                <Text style={styles.loginText}>SIGN-UP</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={()=>{navigation.goBack('Passengerlogin')}}>
+                onPress={() => { navigation.goBack('Passengerlogin') }}>
                 <Text style={styles.forgotAndSignUpText}>Login Instead</Text>
             </TouchableOpacity>
         </View>

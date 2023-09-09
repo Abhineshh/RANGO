@@ -14,7 +14,6 @@ function InitPassenger(){
           <Stack.Screen component={Passengerlogin} name="Passengerlogin"  options={{ headerShown: false }}/>
           <Stack.Screen component={Passengersignup} name="Passengersignup"  options={{ headerShown: false }}/>
           <Stack.Screen component={Passenger} name="Passenger" options={{ headerShown: false }}/>
-          <Stack.Screen component={ChooserMap} name="ChooserMap" options={{headerShown:false}}/>
         </Stack.Navigator>
      
   );

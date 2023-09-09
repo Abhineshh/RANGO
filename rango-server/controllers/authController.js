@@ -2,15 +2,23 @@ const Rider = require("../models/userModel");
 const Driver = require("../models/driverModel");
 const bcrypt = require('bcrypt');
 
+
 module.exports.driverlogin = async (req, res, next) => {
     try {
-        
-
-
-
-    } catch (err) {
-        console.log(err)
-        next(e)
+        const driverEmail = req.body.email;
+        const driverPassword = req.body.password;
+        console.log(driverEmail)
+        console.log(driverPassword)
+        const user = await Driver.findOne({ driverEmail });
+        if (!user)
+            return res.json({ msg: "Incorrect Username or Password", status: false });
+        const isPasswordValid = await Driver.findOne({driverPassword})
+        if (!isPasswordValid)
+            return res.json({ msg: "Incorrect Username or Password", status: false });
+        delete Driver.driverPassword;
+        return res.json({ status: true, user });
+    } catch (ex) {
+        next(ex);
     }
 };
 
@@ -19,43 +27,64 @@ module.exports.driverlogin = async (req, res, next) => {
 
 module.exports.driversignup = async (req, res, next) => {
     try {
-        return res.json({
-            ding: 'driversignup',
-            num: 23,
-        })
-    } catch (err) {
-        console.log(err)
-        next(e)
+        const { name, email } = req.body;
+        const driverName = req.body.name;
+        const driverEmail = req.body.email;
+        const driverPassword = req.body.password;
+
+        const Driveer = await Driver.create({
+            driverName,
+            driverEmail,
+            driverPassword,
+        });
+        console.log(Driveer);
+        delete Driveer.password;
+        return res.json({ status: true, Driveer });
+    } catch (err) { 
+         return res.json({status:false})
+        next(err)
     }
 };
 
 
 module.exports.passengerlogin = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        const result = await Rider.create({
-            email,
-            password
-        });
-
-        res.send('don dong')
-    } catch (err) {
-        console.log(err)
-        next(e)
+        const riderEmail = req.body.email;
+        const riderPassword = req.body.password;
+        console.log(riderEmail)
+        console.log(riderPassword)
+        const user = await Rider.findOne({ riderEmail });
+        if (!user)
+            return res.json({ msg: "Incorrect Username or Password", status: false });
+        const isPasswordValid = await Rider.findOne({riderPassword})
+        if (!isPasswordValid)
+            return res.json({ msg: "Incorrect Username or Password", status: false });
+        delete Rider.riderPassword;
+        return res.json({ status: true, user });
+    } catch (ex) {
+        next(ex);
     }
 }
 
 module.exports.passengersignup = async (req, res, next) => {
     try {
-        return res.json({
-            ding: 'passengersignup',
-            num: 23,
+        const riderName = req.body.name;
+        const riderEmail = req.body.email;
+        const riderPassword = req.body.password;
+        console.log(req.body)
+        console.log(riderName)
+    
+        const user = await Rider.create({
+            riderName,
+            riderEmail,
+            riderPassword,
+        });
+        delete Rider.riderPassword;
+        return res.json({ status: true, user });
 
-
-        })
     } catch (err) {
-        console.log(err)
-        next(e)
+        return res.json({status:false})
+        next(err)
     }
-}
+};
 
