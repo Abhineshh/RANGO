@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     },
      loginBtn: {
         width: "80%",
-        backgroundColor: "#fb5b5a",
+        backgroundColor:'#fb5b5a',
         borderRadius: 25,
         height: 200,
         alignItems: "center",
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
       title: {
         fontWeight: "bold",
         fontSize: 40,
-        color: "#fb5b5a",
+        color: "#00abf0",
         marginBottom: 40,
     },
 })

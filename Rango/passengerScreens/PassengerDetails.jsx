@@ -1,7 +1,26 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import {View,Button,Text,StyleSheet,TouchableOpacity} from 'react-native';
+import { RiderDetailsRoute } from '../APIroutes';
 
-const PassengerDetails = function(){
+const PassengerDetails = function({route}){
+    const [UserEmail,setUser] = useState('');
+
+    useEffect(()=>{
+        setUser(route.params.UserEmail);
+        console.log(UserEmail);
+        getData();
+    }); 
+
+    async function getData(){
+        try{
+            const response = await axios.get(RiderDetailsRoute,{
+
+            });
+        }catch(err){
+            console.log(err);
+        }
+    }
+
     return(
         <View style={styles.container}>
             <View style={styles.card}>
@@ -57,7 +76,7 @@ const styles = StyleSheet.create({
     },
      loginBtn: {
         width: "100%",
-        backgroundColor: "#fb5b5a",
+        backgroundColor: "#00abf0",
         borderRadius: 25,
         height: 70,
         alignItems: "center",

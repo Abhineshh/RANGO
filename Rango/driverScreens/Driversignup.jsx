@@ -7,16 +7,7 @@ import {
     TextInput,
     TouchableOpacity,
 } from 'react-native';
-import {
-    Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import Driver from './Driver';
 import { driversignupRoute } from '../APIroutes';
 
 
@@ -44,7 +35,12 @@ const Driversignup= function({navigation}){
     };
 
      function navigating(){
-        navigation.navigate('Driver');
+        navigation.navigate('Driver',{
+                screen: 'AvailRide',
+                params: {
+                    CurrentUser: 'Driver.Email',
+                }
+            });
     }
 
        async function settheDriver(){
@@ -116,7 +112,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         fontSize: 50,
-        color: "#fb5b5a",
+        color: "#00abf0",
         marginBottom: 40,
     },
     inputView: {
@@ -138,7 +134,7 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         width: "80%",
-        backgroundColor: "#fb5b5a",
+        backgroundColor: "#00abf0",
         borderRadius: 25,
         height: 50,
         alignItems: "center",

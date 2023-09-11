@@ -18,6 +18,7 @@ const riderSchema = new mongoose.Schema({
     type: String,
     required: true,
     min: 8,
+    unique:true,
   },
  
 });

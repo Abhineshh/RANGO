@@ -1,36 +1,17 @@
-import React, { useState, useEffect , useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
     StyleSheet,
     Alert,
     Text,
-    useColorScheme,
     View,
     TextInput,
     TouchableOpacity,
 } from 'react-native';
-import {
-    Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import Passenger from './Passenger';
-import Passengersignup from './Passengersignup';
 import axios from 'axios';
-import { passengerloginRoute} from '../APIroutes';
-import { CurrentUserContext } from './authContextProvider';
+import { passengerloginRoute } from '../APIroutes';
 
 //component
 const Passengerlogin = function ({ navigation }) {
-   const {CurrentUser , setUserEmail} = useContext(CurrentUserContext);
-    const changeHandler = () =>{ 
-        console.log('the current user is ', CurrentUser);
-        setUserEmail(User.email)};
-
 
     const [User, setUser] = useState({
         email: '',
@@ -38,42 +19,49 @@ const Passengerlogin = function ({ navigation }) {
     });
 
 
-    const handleValidation= () => {
-        const { email, password} = User;
+    const handleValidation = () => {
+        const password = User.password;
+        const email = User.email;
         if (password === "") {
             Alert.alert("Email and Password is required.");
             return false;
-        } else if(email === ""){
+        } else if (email === "") {
             Alert.alert("Email and Password is required.");
             return false;
         }
         return true;
     };
 
-    function navigating(){
-        navigation.navigate('Passenger');
+    function navigating() {
+        navigation.navigate('Passenger',
+            {
+                screen: 'Chooser',
+                params: {
+                    CurrentUser: User.email
+                }
+            });
     }
 
 
 
     async function gettheUser() {
-        try{
-        if (handleValidation()) {
-            console.log(User)
-                const useeer= await axios.post(passengerloginRoute,User);
+        try {
+            if (handleValidation()) {
+                console.log(User)
+                const useeer = await axios.post(passengerloginRoute, User);
                 console.log(useeer.data, 'was the response status \n');
-                if(useeer.data.status=== false){
-                    Alert.alert(`couldn't login`);
+                if (useeer.data.status === false) {
+                    Alert.alert(`couldn't login`, 'the email or password is wrong');
                 }
-                if(useeer.data.status === true){
-                    changeHandler();
+                if (useeer.data.status === true) {
+                   
                     navigating();
                 }
             }
-        }catch(e){
+        } catch (e) {
             console.log(e)
-        } 
         }
+    }
 
 
     return (
@@ -102,12 +90,12 @@ const Passengerlogin = function ({ navigation }) {
             </View>
 
             <TouchableOpacity
-                onPress={()=>{gettheUser()}}
+                onPress={() => { gettheUser() }}
                 style={styles.loginBtn}>
                 <Text style={styles.loginText}>LOGIN </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => { navigation.navigate('Passengersignup')}}>
+                onPress={() => { navigation.navigate('Passengersignup') }}>
                 <Text style={styles.forgotAndSignUpText}>No Account then Signup</Text>
             </TouchableOpacity>
         </View>
@@ -123,7 +111,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         fontSize: 50,
-        color: "#fb5b5a",
+        color: "#00abf0",
         marginBottom: 40,
     },
     inputView: {
@@ -145,7 +133,7 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         width: "80%",
-        backgroundColor: "#fb5b5a",
+        backgroundColor: "#00abf0",
         borderRadius: 25,
         height: 50,
         alignItems: "center",

@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState, useContext,useEffect } from 'react';
+import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { MAPBOX_API_KEY } from '../config';
 import axios from 'axios';
 import { ChooserRoute } from '../APIroutes';
@@ -26,17 +26,11 @@ const searchPlaces = async (query) => {
 
 
 
-const Chooser = function ({ navigation }) {
-    const { CurrentUser, setUserEmail } = useContext(CurrentUserContext);
-    const changeHandler = () => {
-        setUserEmail(User.email)
-        console.log('the current user is ', CurrentUser);
-
-    };
-
+const Chooser = function ({ route,navigation }) {
+   
     const [pickup, setpickup] = useState([]);
     const [Destination, setDestination] = useState([]);
-
+  
     const [searchQueryPick, setSearchQueryPick] = useState('');
     const [searchQueryDest, setsearchQueryDest] = useState('');
     const [searchResultsPick, setSearchResultsPick] = useState([]);
@@ -52,8 +46,6 @@ const Chooser = function ({ navigation }) {
         })
         setSearchResultsPick(thepoint);
         console.log('the pickup list \n', thepoint)
-
-
     };
     const handleSearchDest = async () => {
         const results = await searchPlaces(searchQueryDest);
@@ -67,29 +59,45 @@ const Chooser = function ({ navigation }) {
 
     };
 
-     function navigating(){
-        navigation.navigate('PassengerHome');
+    function rideidgen(){
+        let d = Date.now();
+        return d;
+    }
+
+     function navigating(rideid){
+        console.log('navi ridedid',rideid,"  ding  ",route.params.CurrentUser)
+        navigation.navigate('LoadingScreen',{
+            params:{
+                RangoRideId:rideid,
+                CurrentUser:route.params.CurrentUser,
+                }
+        });
     }
 
     const RideInitiator = async () => {
         console.log(pickup," ",Destination);
+        const rideid = rideidgen();
+        console.log('the ride generted now',rideid)
         const ridinator = await axios.post(ChooserRoute,{
 
             pickup,
             Destination,
+            rideremail:'abhinesh@gmail.com',
+            rideid,
 
         });
+        console.log(ridinator.data);
         if(ridinator.data.status=== false){
-            Alert.alert(`couldn't process the data try again`)
+            Alert.alert(`couldn't process the data try again`,'choose pickup and destination')
         }
         if(ridinator.data.status === true){
-            navigating();
+            navigating(rideid);
         }
     }
 
     return (
         <View style={styles.container}>
-            <Text>{CurrentUser}</Text>
+           
             <Text style={styles.title}>Choose PickUp and Destination</Text>
             <View style={styles.place}>
                 <View style={styles.inputView}>
@@ -176,7 +184,7 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         width: "80%",
-        backgroundColor: "#fb5b5a",
+        backgroundColor: "#00abf0",
         borderRadius: 25,
         height: 50,
         alignItems: "center",

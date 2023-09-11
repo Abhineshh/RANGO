@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Passengerlogin from './Passengerlogin';
 import Passengersignup from './Passengersignup';
 import Passenger from './Passenger';
-import ChooserMap from './ChooserMap';
+
 
 const Stack = createNativeStackNavigator();
 

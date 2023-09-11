@@ -9,15 +9,9 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { passengersignupRoute } from '../APIroutes';
-import { CurrentUserContext } from './authContextProvider';
 
 
 const Passengersignup = function ({ navigation }) {
-     const {CurrentUser , setUserEmail} = useContext(CurrentUserContext);
-    const changeHandler = () =>{ 
-        console.log('the current user is ', CurrentUser);
-        setUserEmail(User.email)};
-
 
     const [User, setUser] = useState({
         name: "",
@@ -41,7 +35,14 @@ const Passengersignup = function ({ navigation }) {
     };
 
     function navigating(){
-        navigation.navigate('Passenger');
+        navigation.navigate('Passenger',
+              {
+                screen: 'Chooser',
+                params: {
+                    CurrentUser: User.email
+                }
+            
+        });
     }
 
     async function settheUser() {
@@ -68,7 +69,7 @@ const Passengersignup = function ({ navigation }) {
                 <TextInput
                     style={styles.inputText}
                     placeholder="name"
-                    placeholderTextColor="#003f5c"
+                    placeholderTextColor="#003f5c0"
                     onChangeText={text => {
                         User.name = text
                         setUser({ ...User })
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         fontSize: 50,
-        color: "#fb5b5a",
+        color: "#00abf0",
         marginBottom: 40,
     },
     inputView: {
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
         width: "80%",
-        backgroundColor: "#fb5b5a",
+        backgroundColor: "#00abfb",
         borderRadius: 25,
         height: 50,
         alignItems: "center",

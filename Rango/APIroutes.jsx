@@ -9,12 +9,13 @@ export const driversignupRoute = `${server}/driverauth/driversignup`;
 
 
 export const ChooserRoute = `${server}/rangoRider/Chooser`; //rangoid is created  post
+export const getRiderWait = `${server}/rangoRider/getRiderWait`;
 export const RiderDetailsRoute = `${server}/rangoRider/RiderDetails`; // get
 export const TrackDriverRoute = `${server}/rangoRider/TrackDriver`; // get
 export const EndRideOTP = `${server}/rangoRider/EndRideOTP`; // post
 
 
-export const  AvailRoute = `${server}/rangoDriver/AvailableRides`; //get once created display in availride to the driver if ridenot started
+export const  AvailRideRoute = `${server}/rangoDriver/AvailableRides`; //get once created display in availride to the driver if ridenot started
 export const ChoosenDriverRoute = `${server}/rangoDriver/DriverChoose`;// post
 export const DriverDetailsRoute = `${server}/rangoDriver/DriverDetails`; // get
 export const DriverLiveLocation = `${server}/rangoDriver/DriverLiveLocation`; //put
