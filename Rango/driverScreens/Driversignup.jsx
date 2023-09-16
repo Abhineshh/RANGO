@@ -14,8 +14,7 @@ import { driversignupRoute } from '../APIroutes';
 const Driversignup= function({navigation}){
     const [Driver,setDriver] = useState({
         name : "",
-        phoneno : "", 
-        Email: "",
+        email: "",
         password:"",
     }); 
    
@@ -38,7 +37,7 @@ const Driversignup= function({navigation}){
         navigation.navigate('Driver',{
                 screen: 'AvailRide',
                 params: {
-                    CurrentUser: 'Driver.Email',
+                    CurrentUser: Driver.email,
                 }
             });
     }
@@ -46,7 +45,7 @@ const Driversignup= function({navigation}){
        async function settheDriver(){
             if(handleValidation()){            
                 const useeer = await axios.post(driversignupRoute,Driver)
-                console.log(useeer.status , 'was the response status \n' );
+                console.log(useeer.data.status , 'was the response status \n' );
                 if(useeer.data.status === false){
                     Alert.alert('the emailid or password is alreaddy used')
                 }

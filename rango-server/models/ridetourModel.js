@@ -36,6 +36,9 @@ const rideSchema = new mongoose.Schema({
         type: Array,
         required: true,
     },
+    driverCurrentLocation:{
+        type:Array,
+    }
 
 });
 

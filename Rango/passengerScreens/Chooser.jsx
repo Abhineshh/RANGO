@@ -3,7 +3,7 @@ import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity, FlatList } 
 import { MAPBOX_API_KEY } from '../config';
 import axios from 'axios';
 import { ChooserRoute } from '../APIroutes';
-import { CurrentUserContext } from './authContextProvider';
+import { CurrentUserContext } from '../ParamContext';
 
 
 
@@ -65,12 +65,15 @@ const Chooser = function ({ route,navigation }) {
     }
 
      function navigating(rideid){
-        console.log('navi ridedid',rideid,"  ding  ",route.params.CurrentUser)
+        console.log('navi ridedid',rideid,"  ding  ",route.params.CurrentUser);
+        const ridew = rideid;
+        const cc = route.params.CurrentUser;
+         console.log('navi ridedid',rideid,"  ding  ",cc);
         navigation.navigate('LoadingScreen',{
-            params:{
-                RangoRideId:rideid,
-                CurrentUser:route.params.CurrentUser,
-                }
+            
+                 CurrentUser: route.params.CurrentUser,
+                RangoRideId:ridew
+                
         });
     }
 

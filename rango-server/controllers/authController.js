@@ -27,11 +27,11 @@ module.exports.driverlogin = async (req, res, next) => {
 
 module.exports.driversignup = async (req, res, next) => {
     try {
-        const { name, email } = req.body;
+       
         const driverName = req.body.name;
         const driverEmail = req.body.email;
         const driverPassword = req.body.password;
-
+         console.log(req.body)
         const Driveer = await Driver.create({
             driverName,
             driverEmail,
@@ -51,8 +51,8 @@ module.exports.passengerlogin = async (req, res, next) => {
     try {
         const riderEmail = req.body.email;
         const riderPassword = req.body.password;
-        console.log(riderEmail)
-        console.log(riderPassword)
+        console.log('emailid',riderEmail)
+        console.log('password',riderPassword)
         const user = await Rider.findOne({ riderEmail });
         if (!user)
             return res.json({ msg: "Incorrect Username or Password", status: false });
@@ -71,7 +71,7 @@ module.exports.passengersignup = async (req, res, next) => {
         const riderName = req.body.name;
         const riderEmail = req.body.email;
         const riderPassword = req.body.password;
-        console.log(req.body)
+        console.log('asdfsfd',req.body)
         console.log(riderName)
     
         const user = await Rider.create({
@@ -83,6 +83,7 @@ module.exports.passengersignup = async (req, res, next) => {
         return res.json({ status: true, user });
 
     } catch (err) {
+        console.log(err)
         return res.json({status:false})
         next(err)
     }

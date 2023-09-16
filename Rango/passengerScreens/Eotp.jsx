@@ -1,7 +1,39 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React,{useState} from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet ,Alert} from 'react-native';
+import axios from 'axios';
+import { EndRideOTP } from '../APIroutes';
+import { useSharedParams } from '../ParamContext';
 
-const Eotp = function () {
+const Eotp = function ({navigation}) {
+
+    const { sharedParams } = useSharedParams();
+    const Currentuser = sharedParams.CurrentUser;
+    const Rangorideid = sharedParams.RangoRideId;
+
+     const [otp, setotp] = useState(Number);
+
+    async function EndRide() {
+        try {
+            console.log('ding ding')
+            const response = await axios.post(EndRideOTP,{
+                rangoid:Rangorideid,
+                stotp:otp,
+            })
+            if(response.data.status=== true){
+                Alert.alert("the ride has Ended");
+                navigation.goBack('Chooser');
+                
+            }
+            if(response.data.status === false){
+                Alert.alert('Wrong otp',"retry with correct otp")
+            }
+
+        } catch (er) {
+            console.error(er)
+        }
+    }
+
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Enter Your End OTP</Text>
@@ -10,10 +42,15 @@ const Eotp = function () {
                     style={styles.inputText}
                     placeholder="Enter the EOTP"
                     placeholderTextColor="#003f5c"
+                    onChangeText={text => {
+                        setotp(text)
+                    }}
                 />
             </View>
             <TouchableOpacity
-                
+                onPress={()=>{
+                    EndRide();
+                }}
                 style={styles.loginBtn}>
                 <Text style={styles.loginText}>END THE RIDE</Text>
             </TouchableOpacity>

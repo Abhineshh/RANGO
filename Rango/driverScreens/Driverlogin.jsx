@@ -11,7 +11,7 @@ import axios from 'axios';
 import { driverloginRoute } from '../APIroutes';
 
 const Driverlogin = function ({ navigation }) {
-    const [Driver, setDriver] = useState({ Email: "", password: ""});
+    const [Driver, setDriver] = useState({ email: "", password: ""});
 
      const handleValidation= () => {
         const { email, password} = Driver;
@@ -26,10 +26,11 @@ const Driverlogin = function ({ navigation }) {
     };
 
     function navigating(){
+        console.log(Driver.email)
         navigation.navigate('Driver', {
                 screen: 'AvailRide',
                 params: {
-                    CurrentUser: 'Driver.Email',
+                    CurrentUser: Driver.email,
                 }
             });
     }
@@ -38,8 +39,9 @@ const Driverlogin = function ({ navigation }) {
        async function gettheDriver(){
             try{
                 if(handleValidation()){
+                    console.log(Driver.email)
                 const useeer = await axios.post(driverloginRoute,Driver)
-                console.log(useeer.status , 'was the response status \n' );
+                console.log(useeer.data.status,useeer.data.msg , 'was the response status \n' );
                   if(useeer.data.status=== false){
                     Alert.alert(`couldn't login`);
                 }

@@ -1,7 +1,42 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet,Alert } from 'react-native';
+import axios from 'axios';
+import { StartRideOTP } from '../APIroutes';
+import { useSharedParams } from '../ParamContext';
 
-const Sotp = function () {
+
+const Sotp = function ({route,navigation}) {
+
+    const { sharedParams } = useSharedParams();
+  const Currentuser = sharedParams.CurrentUser;
+  const Rangorideid = sharedParams.RangoRideId;
+
+
+
+    const [otp, setotp] = useState(Number);
+
+
+    async function StartRide() {
+        try {
+            console.log('ding ding')
+            const response = await axios.post(StartRideOTP,{
+                rangoid:Rangorideid,
+                stotp:otp,
+            })
+            if(response.data.status=== true){
+                navigation.navigate('DriverMap');
+            }
+            if(response.data.status === false){
+                Alert.alert('Wrong otp',"retry with correct otp")
+            }
+
+        } catch (er) {
+            console.error(er)
+        }
+    }
+
+
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Enter Your End OTP</Text>
@@ -10,12 +45,17 @@ const Sotp = function () {
                     style={styles.inputText}
                     placeholder="Enter the EOTP"
                     placeholderTextColor="#003f5c"
+                    onChangeText={text => {
+                        setotp(text)
+                    }}
                 />
             </View>
             <TouchableOpacity
-                
+                onPress={() => {
+                    StartRide()
+                }}
                 style={styles.loginBtn}>
-                <Text style={styles.loginText}>END THE RIDE</Text>
+                <Text style={styles.loginText}>START THE RIDE</Text>
             </TouchableOpacity>
         </View>);
 }

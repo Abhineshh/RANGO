@@ -1,9 +1,0 @@
-npx react-native run-android - to start the android emulator and reactNative-server 
-
-npm run android  = to start the projext in the device or phone
-
-
-  callback={({ location, event }) => {
-                       setDestination(location) // location object from mapbox
-                        // event onMouseDown supplied if suggestion clicked
-                    }}

@@ -13,7 +13,7 @@ const router = require('express').Router();
 
 router.post('/Chooser',Chooser);
 router.get('/getRiderWait',RiderWait)
-router.post('/RiderDetails',RiderDetails);
+router.get('/RiderDetails',RiderDetails);
 router.get('/TrackDriver',TrackDriver);
 router.post('/EndRideOTP',EndRideOTP);
 

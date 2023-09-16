@@ -1,69 +1,154 @@
-import React from 'react';
-import {View,Button,Text,StyleSheet,TouchableOpacity} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { DriverDetailsRoute } from '../APIroutes';
+import { MAPBOX_API_KEY } from '../config';
+import axios from 'axios';
+import { useSharedParams } from '../ParamContext';
 
-const DriverDetails = function(){
-    return(
+const DriverDetails = function ({ route, navigation }) {
+
+
+    const { sharedParams } = useSharedParams();
+
+    const Currentuser = sharedParams.CurrentUser;
+    const Rangorideid = sharedParams.RangoRideId;
+
+    const [pcoords, setpcoords] = useState('');
+    const [dcoords, setdcoords] = useState('');
+    const [distance, setdistance] = useState('');
+    const [otp, setotp] = useState('');
+    const [rideremail, setrideremail] = useState('');
+    const [gotten, changegotten] = useState(false);
+
+    useEffect(() => {
+        getData();
+       
+    }, []);
+
+    async function geocoding(thecoord1, thecoord2) {
+        console.log(thecoord1, '     ', thecoord2)
+        console.log(typeof (thecoord1))
+        const names = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${thecoord1},${thecoord2}.json?access_token=${MAPBOX_API_KEY}`)
+        const placename = names.data.features;
+        const ding = placename.map((name) => {
+            if (name['center'][0] == thecoord1 && name['center'][1] == thecoord2) {
+                return name['place_name']
+            }
+            else {
+                return 'bling';
+            }
+        });
+        let actualname;
+        for (const value of ding) {
+            if (value != 'bling') {
+                actualname = value;
+                break;
+            }
+        }
+        console.log('the name', actualname)
+        return actualname;
+    }
+
+    async function getData() {
+        try {
+            console.log('ding ding', Rangorideid);
+            const a = Rangorideid;
+            console.log(a)
+            const response = await axios.get(DriverDetailsRoute, {
+                params: {
+                    rideid: a,
+                }
+            });
+            const result = response.data;
+            console.log(result.status);
+            if (result.status === true) {
+                const dest = await geocoding(...result.datas.destinationLocation)
+                console.log(dest)
+                setdcoords(dest);
+                const pick = await geocoding(...result.datas.pickupLocation)
+                console.log(pick)
+                setpcoords(pick);
+                setotp(result.datas.eotp);
+                setrideremail(result.datas.riderEmail);
+                console.log(dcoords, pcoords, otp, rideremail, gotten)
+                changegotten(true);
+                return true;
+            }
+        } catch (err) {
+            console.log('asfdasdfsdf', err);
+        }
+    }
+
+    return (
         <View style={styles.container}>
-            <View style={styles.card}>
-                <Text style={styles.texter}>From : Pickup loacation goes here{}</Text>
-                <Text style={styles.texter} >To : Destination location goes here{}</Text>
-                <Text style={styles.texter}>Distance : Distance gose here{}</Text>
+            {gotten ? (
+                <View>
+                    <View style={styles.card}>
+                        <Text style={styles.texter}>From :{pcoords}</Text>
+                        <Text style={styles.texter} >To : {dcoords}</Text>
+
+                        <View style={styles.pcard}>
+
+                            <Text style={styles.texter}>Start OTP : {otp}</Text>
+                        </View>
+                        <View style={styles.card}>
+                            <Text style={styles.texter}>Passenger Email :{rideremail}</Text>
+
+                        </View>
+                        <View>
+                            <TouchableOpacity
+                                style={styles.loginBtn}>
+                                <Text style={styles.loginText}>CANCEL THE RIDE</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            ) : (<View style={styles.container}>
+                <Text>
+                    loading the details....
+                </Text>
             </View>
-            <View style={styles.pcard}>
-                <Text style={styles.texter}>Price : price goes here</Text>
-                <Text style={styles.texter}>Start OTP : goes here</Text>
-            </View>
-            <View style={styles.card}>
-                <Text style={styles.texter}>Passenger Name : Passenger name goes here</Text>
-                <Text style={styles.texter}>Passenger phone NUmber : phone number goes here</Text>
-            </View>
-            <View>
-                 <TouchableOpacity
-                style={styles.loginBtn}>
-                <Text style={styles.loginText}>CANCEL THE RIDE</Text>
-            </TouchableOpacity>
-            </View>
+            )}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#BBB',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        color:"#000",
+        color: "#000",
     },
-    card:{
-        backgroundColor:'#fff',
-        marginTop:25,
-        marginBottom:25,
-        height:'29%',
-        width:'90%',
-        borderRadius:10,
-        padding:15,
+    card: {
+        backgroundColor: '#fff',
+        marginTop: 25,
+        marginBottom: 25,
+        height: '29%',
+        width: '90%',
+        borderRadius: 10,
+        padding: 15,
     },
-    pcard:{
-        backgroundColor:'#fff',
-        height:'15%',
-        borderRadius:10,
-        padding:15,
-         width:'90%',
+    pcard: {
+        backgroundColor: '#fff',
+        height: '15%',
+        borderRadius: 10,
+        padding: 15,
+        width: '90%',
     },
-    texter:{
-        fontSize:20,
-        padding:5,
-        color:"#000",
+    texter: {
+        fontSize: 20,
+        padding: 5,
+        color: "#000",
     },
-     loginBtn: {
+    loginBtn: {
         width: "100%",
         backgroundColor: "#fb5b5a",
         borderRadius: 25,
         height: 70,
         alignItems: "center",
         justifyContent: "center",
-        padding:15,
+        padding: 15,
     },
 });
 

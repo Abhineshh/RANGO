@@ -48,15 +48,13 @@ const Passengersignup = function ({ navigation }) {
     async function settheUser() {
         console.log(User);
         if (handleValidation()) {
-      const { username,email,password } = User;
       const dataa = await axios.post(passengersignupRoute, User );
       
         console.log(dataa)
       if (dataa.data.status === false) {
-       Alert.alert(`couldn't login`);
+       Alert.alert(`'the emailid or password is alreaddy used`);
       }
       if( dataa.data.status === true) {
-        changeHandler();
         navigating();
       }
     }

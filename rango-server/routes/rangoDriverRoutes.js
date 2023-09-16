@@ -1,7 +1,7 @@
 
 const {
     AvailableRides,
-    DriverChoosen,
+    DriverChoose,
     DriverDetails,
     DriverLiveLocation,
     StartRideOTP
@@ -11,7 +11,7 @@ const router = require('express').Router();
 
 
 router.get('/AvailableRides',AvailableRides);
-router.put('/DriverChoosen',DriverChoosen);
+router.post('/DriverChoose',DriverChoose);
 router.get('/DriverDetails',DriverDetails);
 router.put('/DriverLiveLocation',DriverLiveLocation);
 router.post('/StartRideOTP',StartRideOTP);
