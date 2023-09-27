@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { StyleSheet, View } from 'react-native';
 import Mapbox,{ PointAnnotation, MarkerView ,Camera } from '@rnmapbox/maps';
 import { MAPBOX_API_KEY } from '../config';
-import { TrackDriverRoute } from '../APIroutes';
+import { RiderDetailsRoute } from '../APIroutes';
 import axios from 'axios';
 import { useSharedParams } from '../ParamContext';
 
@@ -13,12 +13,36 @@ const { sharedParams } = useSharedParams();
   const Currentuser = sharedParams.CurrentUser;
   const Rangorideid = sharedParams.RangoRideId;
 
-  const [coords,setcoords] = useState([77.345,12.434]);
+  const [coords,setcoords] = useState([77.645,13.434]);
 
   useEffect(()=>{
-   
+   async function getData() {
+    try {
+      console.log('ding ding', Rangorideid);
+      const a = Rangorideid;
+      console.log(a)
+      const response = await axios.get(RiderDetailsRoute, {
+        params: {
+          rideid: a,
+        }
+      });
+      const result = response.data;
+      console.log(result.status);
+      if (result.status === true) {
+       const currentLocation = result.datas.driverCurrentLocation;
+       setcoords(currentLocation);
+
+        return true;
+      }
+    } catch (err) {
+      console.log('asfdasdfsdf', err);
+    }
+  }
 
   },[]);
+
+
+   
 
   return (
    <View style={styles.page}>

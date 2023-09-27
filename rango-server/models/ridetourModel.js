@@ -38,8 +38,20 @@ const rideSchema = new mongoose.Schema({
     },
     driverCurrentLocation:{
         type:Array,
+    },
+    price:{
+        type:Number,
+    },
+    distane:{
+        type:Number,
+    },
+    Rating:{
+        type:Number,
+        max:5,
+    },
+    didCancel:{
+        type:Boolean,
     }
-
 });
 
 module.exports = mongoose.model("RideTour", rideSchema);

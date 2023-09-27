@@ -1,0 +1,19 @@
+ <View style={styles.page}>
+      <View style={styles.container}>
+        <Mapbox.MapView style={styles.map}>
+          <Camera zoomLevel={4} centerCoordinate={coords} />
+          <ShapeSource id='line1' shape={routeDirection}>
+            <LineLayer 
+            id='routerLine01'
+            style={{
+              lineColor:'#fa9314',
+              lineWidth:4,
+            }}
+            />
+          </ShapeSource>
+
+          <PointAnnotation id='the location' coordinate={coords} />
+          <PointAnnotation id='the location' coordinate={nav} />
+        </Mapbox.MapView>
+      </View>
+    </View>

@@ -7,7 +7,7 @@ module.exports.Chooser = async (req, res, next) => {
         console.log('ding ding');
         const pickup = req.body.pickup;
         const destination = req.body.Destination;
-        const rideremail = req.body.rideremail;
+        const rideremail = req.body.riderEmail;
         const riderid = req.body.rideid;
         console.log(pickup, " ", destination, " ", rideremail, " ", riderid)
 
@@ -35,7 +35,10 @@ module.exports.Chooser = async (req, res, next) => {
             eotp: endotp,
             pickupLocation: pickup,
             destinationLocation: destination,
-            driverCurrentLocation:[0,0]
+            price:0,
+            distance:0,
+            Rating:0,
+            driverCurrentLocation:[77.645,13.434]
         });
 
         res.json({ status: true, tour })

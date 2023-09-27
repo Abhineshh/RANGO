@@ -16,6 +16,7 @@ const PassengerDetails = function ({ route }) {
     const [dcoords, setdcoords] = useState('');
     const [distance, setdistance] = useState('');
     const [otp, setotp] = useState('');
+    const [price,setprice] = useState('');
     const [driveremail, setdriveremail] = useState('');
     const [gotten, changegotten] = useState(false);
 
@@ -63,16 +64,14 @@ const PassengerDetails = function ({ route }) {
             if (result.status === true) {
                 const [thecoord1, thecoord2] = result.datas.destinationLocation;
                 const dest = await geocoding(...result.datas.destinationLocation);
-
                 console.log('name of the place', dest)
-
                 setdcoords(dest);
                 const pick =await geocoding(...result.datas.pickupLocation)
-
                 console.log(pick)
                 setpcoords(pick);
                 setotp(result.datas.sotp);
                 setdriveremail(result.datas.driverEmail);
+                let d = result.datas.distance
                 console.log(dcoords, pcoords, otp, driveremail, gotten)
                 changegotten(true);
                 return true;
@@ -90,16 +89,18 @@ const PassengerDetails = function ({ route }) {
                         <Text style={styles.texter}>From : {pcoords}</Text>
                         <Text style={styles.texter} >To : {dcoords}</Text>
                     </View>
-                    <View style={styles.pcard}>
-                        <Text style={styles.texter}>End OTP : {otp}</Text>
+                    <View style={styles.pcard}>r
+                        <Text style={styles.texter}>Start OTP : {otp}</Text>
+                        <Text style={styles.texter}>price : {price}</Text>
+                        <Text style={styles.texter}>Distance: {distance}</Text>
                     </View>
                     <View style={styles.card}>
                         <Text style={styles.texter}>Driver Email : {driveremail}</Text>
-
                     </View>
                     <View>
                         <TouchableOpacity
-                            style={styles.loginBtn}>
+                            style={styles.loginBtn}
+                            >
                             <Text style={styles.loginText}>CANCEL THE RIDE</Text>
                         </TouchableOpacity>
                     </View>

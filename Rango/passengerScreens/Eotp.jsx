@@ -21,7 +21,7 @@ const Eotp = function ({navigation}) {
             })
             if(response.data.status=== true){
                 Alert.alert("the ride has Ended");
-                navigation.goBack('Chooser');
+                navigation.navigate('Payments');
                 
             }
             if(response.data.status === false){

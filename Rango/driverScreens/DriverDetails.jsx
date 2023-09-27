@@ -80,34 +80,33 @@ const DriverDetails = function ({ route, navigation }) {
     }
 
     return (
-        <View style={styles.container}>
+       <View style={styles.container}>
             {gotten ? (
                 <View>
                     <View style={styles.card}>
-                        <Text style={styles.texter}>From :{pcoords}</Text>
+                        <Text style={styles.texter}>From : {pcoords}</Text>
                         <Text style={styles.texter} >To : {dcoords}</Text>
+                    </View>
+                    <View style={styles.pcard}>
+                        <Text style={styles.texter}>End OTP : {otp}</Text>
+                    </View>
+                    <View style={styles.card}>
+                        <Text style={styles.texter}>Driver Email : {rideremail}</Text>
 
-                        <View style={styles.pcard}>
-
-                            <Text style={styles.texter}>Start OTP : {otp}</Text>
-                        </View>
-                        <View style={styles.card}>
-                            <Text style={styles.texter}>Passenger Email :{rideremail}</Text>
-
-                        </View>
-                        <View>
-                            <TouchableOpacity
-                                style={styles.loginBtn}>
-                                <Text style={styles.loginText}>CANCEL THE RIDE</Text>
-                            </TouchableOpacity>
-                        </View>
+                    </View>
+                    <View>
+                        <TouchableOpacity
+                            style={styles.loginBtn}>
+                            <Text style={styles.loginText}>CANCEL THE RIDE</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-            ) : (<View style={styles.container}>
-                <Text>
-                    loading the details....
-                </Text>
-            </View>
+            ) : (
+                <View style={styles.container}>
+                    <Text>
+                        loading the details....
+                    </Text>
+                </View>
             )}
         </View>
     );

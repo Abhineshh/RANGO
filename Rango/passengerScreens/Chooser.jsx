@@ -37,7 +37,7 @@ const Chooser = function ({ route,navigation }) {
     const [searchResultsDest, setSearchResultsDest] = useState([]);
 
     const handleSearchPickup = async () => {
-        const results = await searchPlaces(searchQueryPick);
+        const results = await +9(searchQueryPick);
 
         const thepoint = results.map((ding) => {
             const coord = ding['center']
@@ -85,7 +85,7 @@ const Chooser = function ({ route,navigation }) {
 
             pickup,
             Destination,
-            rideremail:'abhinesh@gmail.com',
+            riderEmail:route.params.CurrentUser,
             rideid,
 
         });
