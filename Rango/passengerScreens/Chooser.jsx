@@ -3,7 +3,7 @@ import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity, FlatList } 
 import { MAPBOX_API_KEY } from '../config';
 import axios from 'axios';
 import { ChooserRoute } from '../APIroutes';
-import { CurrentUserContext } from '../ParamContext';
+import { useSharedParams } from '../ParamContext';
 
 
 
@@ -28,6 +28,8 @@ const searchPlaces = async (query) => {
 
 const Chooser = function ({ route,navigation }) {
    
+    const { setSharedParams } = useSharedParams();
+
     const [pickup, setpickup] = useState([]);
     const [Destination, setDestination] = useState([]);
   
@@ -37,7 +39,7 @@ const Chooser = function ({ route,navigation }) {
     const [searchResultsDest, setSearchResultsDest] = useState([]);
 
     const handleSearchPickup = async () => {
-        const results = await +9(searchQueryPick);
+        const results = await searchPlaces(searchQueryPick);
 
         const thepoint = results.map((ding) => {
             const coord = ding['center']
@@ -72,7 +74,7 @@ const Chooser = function ({ route,navigation }) {
         navigation.navigate('LoadingScreen',{
             
                  CurrentUser: route.params.CurrentUser,
-                RangoRideId:ridew
+                RangoRideId:ridew,
                 
         });
     }
@@ -98,9 +100,26 @@ const Chooser = function ({ route,navigation }) {
         }
     }
 
+    function logoutfunction(){
+         setSharedParams({
+            CurrentUser: '',
+            RangoRideId: '',
+        });
+         navigation.popToTop();
+    }
+
     return (
         <View style={styles.container}>
-           
+            <View>
+                <TouchableOpacity
+                            style={styles.logoutbutton}
+                            onPress={()=>{
+                                logoutfunction();
+                            }}
+                            >
+                            <Text style={styles.inputText}>LOGOUT</Text>
+                 </TouchableOpacity>
+            </View>
             <Text style={styles.title}>Choose PickUp and Destination</Text>
             <View style={styles.place}>
                 <View style={styles.inputView}>
@@ -161,11 +180,22 @@ const Chooser = function ({ route,navigation }) {
 }
 
 const styles = StyleSheet.create({
+       logoutbutton:{
+               width: "25%",
+        backgroundColor: "#00abf0",
+        borderRadius: 6,
+        height: 30,
+        padding:4,
+        alignItems: "center",
+        marginTop: 10,
+        marginBottom: 0,
+        marginLeft:'72%',
+    },
     container: {
         alignItems: 'center',
         backgroundColor: '#BBB',
         justifyContent: 'center',
-
+        height:'100%',
     },
     place: {
         widht: '100%',
@@ -182,8 +212,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 27,
         color: "#fb5b5a",
-        marginBottom: 80,
-        marginTop: 40,
+        marginBottom: 20,
+        marginTop: 20,
     },
     loginBtn: {
         width: "80%",

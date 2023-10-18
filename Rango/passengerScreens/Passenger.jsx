@@ -4,7 +4,6 @@ import Chooser from './Chooser';
 import PassengerDetails from './PassengerDetails';
 import PassengerMap from './PassengerMap';
 import PassengerReview from './PassengerReview';
-import Payments from './Payments';
 import { NavigationContainer } from '@react-navigation/native';
 import PassengerHome from './passengerHome';
 import LoadingScreen from './loadingScreen';
@@ -20,7 +19,6 @@ function Passenger() {
                 <PassengerStack.Screen component={Chooser} name="Chooser" options={{ headerShown: false }} />
                 <PassengerStack.Screen component={PassengerHome} name="PassengerHome" option={{ headerShown: false }} />
                 <PassengerStack.Screen component={PassengerReview} name="PassengerReview" options={{ headerShown: false }} />
-                <PassengerStack.Screen component={Payments} name="Payments" options={{ headerShown: false }} />
                 <PassengerStack.Screen component={LoadingScreen} name='LoadingScreen' options={{ headerShown: false }} />
             
         </PassengerStack.Navigator>

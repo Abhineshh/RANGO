@@ -20,3 +20,17 @@ export const ChoosenDriverRoute = `${server}/rangoDriver/DriverChoose`;// post
 export const DriverDetailsRoute = `${server}/rangoDriver/DriverDetails`; // get
 export const DriverLiveLocation = `${server}/rangoDriver/DriverLiveLocation`; //put
 export const StartRideOTP = `${server}/rangoDriver/StartRideOTP`; // post
+
+//review apis
+export const PassengerReviewRoute = `${server}/rangoRider/PassengerReview`;
+export const DriverReviewRoute = `${server}/rangoDriver/DriverReview`;
+
+
+//Cancel Ride API's
+
+export const PassengerCancel = `${server}/rangoRider/PassengerCancel`;
+export const DriverCancel =  `${server}/rangoDriver/DriverCancel`;
+
+//Ride End Api's for only driver
+
+export const DriverRideEnd = `${server}/rangoDriver/DriverEndRide`;

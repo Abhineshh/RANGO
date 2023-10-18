@@ -21,11 +21,14 @@ const Eotp = function ({navigation}) {
             })
             if(response.data.status=== true){
                 Alert.alert("the ride has Ended");
-                navigation.navigate('Payments');
+                navigation.navigate('PassengerReview');
                 
             }
             if(response.data.status === false){
                 Alert.alert('Wrong otp',"retry with correct otp")
+            }
+            if(response.data.status === 'didnotstart'){
+                Alert.alert('The Ride has not Started Yet')
             }
 
         } catch (er) {

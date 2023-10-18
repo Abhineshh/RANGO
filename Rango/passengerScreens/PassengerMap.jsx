@@ -1,6 +1,6 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Mapbox,{ PointAnnotation, MarkerView ,Camera } from '@rnmapbox/maps';
+import Mapbox, { PointAnnotation, MarkerView, Camera } from '@rnmapbox/maps';
 import { MAPBOX_API_KEY } from '../config';
 import { RiderDetailsRoute } from '../APIroutes';
 import axios from 'axios';
@@ -9,49 +9,51 @@ import { useSharedParams } from '../ParamContext';
 Mapbox.setAccessToken(MAPBOX_API_KEY);
 
 const PassengerMap = () => {
-const { sharedParams } = useSharedParams();
+  const { sharedParams } = useSharedParams();
   const Currentuser = sharedParams.CurrentUser;
   const Rangorideid = sharedParams.RangoRideId;
 
-  const [coords,setcoords] = useState([77.645,13.434]);
+  const [coords, setcoords] = useState([77.645, 13.434]);
 
-  useEffect(()=>{
-   async function getData() {
-    try {
-      console.log('ding ding', Rangorideid);
-      const a = Rangorideid;
-      console.log(a)
-      const response = await axios.get(RiderDetailsRoute, {
-        params: {
-          rideid: a,
+  useEffect(() => {
+    async function getData() {
+      try {
+        console.log('ding ding', Rangorideid);
+        const a = Rangorideid;
+        console.log(a)
+        const response = await axios.get(RiderDetailsRoute, {
+          params: {
+            rideid: a,
+          }
+        });
+        const result = response.data;
+        console.log(result.status);
+        if (result.status === true) {
+          const currentLocation = result.datas.driverCurrentLocation;
+          console.log(currentLocation);
+          setcoords(currentLocation);
         }
-      });
-      const result = response.data;
-      console.log(result.status);
-      if (result.status === true) {
-       const currentLocation = result.datas.driverCurrentLocation;
-       setcoords(currentLocation);
-
-        return true;
+      } catch (err) {
+        console.log('Error With Getting The Driver Live location', err);
       }
-    } catch (err) {
-      console.log('asfdasdfsdf', err);
-    }
-  }
+    };
+    const interval = setInterval(getData,5000);
 
-  },[]);
+    return () => clearInterval(interval);
+
+  }, []);
 
 
-   
+
 
   return (
-   <View style={styles.page}>
+    <View style={styles.page}>
       <View style={styles.container}>
-      <Mapbox.MapView style={styles.map}>
+        <Mapbox.MapView style={styles.map}>
           <Camera zoomLevel={4} centerCoordinate={coords} />
           <PointAnnotation id='the location' coordinate={coords} />
 
-        </Mapbox.MapView> 
+        </Mapbox.MapView>
       </View>
     </View>
   );

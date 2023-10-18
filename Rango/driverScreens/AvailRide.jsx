@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Button, Text, ScrollView, StyleSheet ,TouchableOpacity} from 'react-native';
 import { AvailRideRoute } from '../APIroutes';
 import { ChoosenDriverRoute } from '../APIroutes';
 import axios from 'axios';
@@ -93,27 +93,44 @@ const AvailRide = function ({ route, navigation }) {
         }
     }
 
+    function logoutfunction(){
+         setSharedParams({
+            CurrentUser: '',
+            RangoRideId: '',
+        });
+         navigation.popToTop();
+    }
     return (
-        <View>
+        <View style={styles.otter}>
+            <View>
+                <TouchableOpacity
+                            style={styles.logoutbutton}
+                            onPress={()=>{
+                                logoutfunction();
+                            }}
+                            >
+                            <Text style={styles.inputText}>LOGOUT</Text>
+                 </TouchableOpacity>
+            </View>
             {gotten ? (
-            <ScrollView style={styles.container}>
-                {
-                    gotRider.map((AvailableRides, index) => {
-                        return (
-                            <View style={styles.card} key={index} onPress={() => { 'DriverHome' }}>
-                                <Text>Pickup = {AvailableRides.pick} </Text>
-                                <Text>Destination = {AvailableRides.dest}</Text>
-                                <Button title={"i am ready for this ride"} onPress={() => { setRide(AvailableRides) }} />
-                            </View>
-                        )
-                    })
-                }
+                <ScrollView style={styles.container}>
+                    {
+                        gotRider.map((AvailableRides, index) => {
+                            return (
+                                <View style={styles.card} key={index} onPress={() => { 'DriverHome' }}>
+                                    <Text>Pickup = {AvailableRides.pick} </Text>
+                                    <Text>Destination = {AvailableRides.dest}</Text>
+                                    <Button title={"i am ready for this ride"} onPress={() => { setRide(AvailableRides) }} />
+                                </View>
+                            )
+                        })
+                    }
 
 
-            </ScrollView>
+                </ScrollView>
             ) : (
                 <View style={styles.container}>
-                    <Text>
+                    <Text style={{color:'white'}}>
                         loading the details
                     </Text>
                 </View>
@@ -127,11 +144,26 @@ const AvailRide = function ({ route, navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-
         backgroundColor: '#BBB',
-
-
-
+    },
+    logoutbutton:{
+               width: "25%",
+        backgroundColor: "#00abf0",
+        borderRadius: 6,
+        height: 30,
+        padding:4,
+        alignItems: "center",
+        marginTop: 10,
+        marginBottom: 0,
+        marginLeft:'72%',
+    },
+    otter: {
+         height:'100%',
+         backgroundColor: '#BBB',
+    },
+    inputText: {
+        height: 60,
+        color: "white"
     },
     card: {
         backgroundColor: '#fff',

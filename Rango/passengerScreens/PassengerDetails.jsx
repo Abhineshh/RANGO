@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator ,Alert} from 'react-native';
 import axios from 'axios';
-import { RiderDetailsRoute } from '../APIroutes';
+import { RiderDetailsRoute,PassengerCancel } from '../APIroutes';
 import { MAPBOX_API_KEY } from '../config';
 import { useSharedParams } from '../ParamContext';
 
-const PassengerDetails = function ({ route }) {
+const PassengerDetails = function ({ route , navigation}) {
 
     const { sharedParams } = useSharedParams();
 
@@ -77,7 +77,27 @@ const PassengerDetails = function ({ route }) {
                 return true;
             }
         } catch (err) {
-            console.log('asfdasdfsdf', err);
+            console.log('Getting the Ride has a Error', err);
+        }
+    }
+
+
+    async function CancelRide(){
+        try{
+            const response = await axios.post(PassengerCancel,{
+                Rangorideid,
+            });
+
+            console.log(response.data);
+            if(response.data.status == true){
+                navigation.navigate('PassengerReview');
+            }
+            if(response.data.status == false){
+                console.log('Cancellation Unsuccessfull');
+                 Alert.alert(`couldn't Cancel the Ride`, 'Try Again Later');
+            }
+        }catch(err){
+            console.log('Cancelling the ride has given a error',err)
         }
     }
 
@@ -89,7 +109,7 @@ const PassengerDetails = function ({ route }) {
                         <Text style={styles.texter}>From : {pcoords}</Text>
                         <Text style={styles.texter} >To : {dcoords}</Text>
                     </View>
-                    <View style={styles.pcard}>r
+                    <View style={styles.card}>
                         <Text style={styles.texter}>Start OTP : {otp}</Text>
                         <Text style={styles.texter}>price : {price}</Text>
                         <Text style={styles.texter}>Distance: {distance}</Text>
@@ -100,6 +120,7 @@ const PassengerDetails = function ({ route }) {
                     <View>
                         <TouchableOpacity
                             style={styles.loginBtn}
+                            onPress={()=>{CancelRide()}}
                             >
                             <Text style={styles.loginText}>CANCEL THE RIDE</Text>
                         </TouchableOpacity>
@@ -119,7 +140,7 @@ const PassengerDetails = function ({ route }) {
 
 const styles = StyleSheet.create({
     container: {
-
+        height:'100%',
         backgroundColor: '#BBB',
         alignItems: 'center',
         justifyContent: 'flex-start',
@@ -129,8 +150,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         marginTop: 25,
         marginBottom: 25,
-        height: '29%',
-        width: '90%',
+        height: 'fitContent',
+        width: 'fitContent',
         borderRadius: 10,
         padding: 15,
     },
