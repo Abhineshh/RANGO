@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     Alert,
@@ -11,72 +11,79 @@ import axios from 'axios';
 import { driversignupRoute } from '../APIroutes';
 
 
-const Driversignup= function({navigation}){
-    const [Driver,setDriver] = useState({
-        name : "",
+const Driversignup = function ({ navigation }) {
+    const [Driver, setDriver] = useState({
+        name: "",
         email: "",
-        password:"",
-    }); 
-   
-     const handleValidation= () => {
-        const { username, email, password} = Driver;
-        if (username === "") {
+        password: "",
+    });
+
+    const handleValidation = () => {
+        const { username, email, password } = Driver;
+
+        const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+        const passwordRegex = /^[A-Za-z0-9._%-]{4,20}/;
+        const UserNameRegex = /^[A-Za-z0-9._%-]{4,20}/;
+
+        if (username === "" || !UserNameRegex.test(username)) {
             Alert.alert("Email and Password is required.");
             return false;
-        } else if (password === "") {
+        } else if (password === "" || !passwordRegex.test(password)) {
             Alert.alert("Email and Password is required.");
             return false;
-        } else if(email === ""){
+        } else if (email === "" || !emailRegex.test(email)) {
             Alert.alert("Email and Password is required.");
             return false;
         }
         return true;
     };
 
-     function navigating(){
-        navigation.navigate('Driver',{
-                screen: 'AvailRide',
-                params: {
-                    CurrentUser: Driver.email,
-                }
-            });
+    function navigating() {
+        navigation.navigate('Driver', {
+            screen: 'AvailRide',
+            params: {
+                CurrentUser: Driver.email,
+            }
+        });
     }
 
-       async function settheDriver(){
-            if(handleValidation()){            
-                const useeer = await axios.post(driversignupRoute,Driver)
-                console.log(useeer.data.status , 'was the response status \n' );
-                if(useeer.data.status === false){
-                    Alert.alert('the emailid or password is alreaddy used')
-                }
-                if(useeer.data.status === true){
-                    navigating();
-                }
-            } 
+    async function settheDriver() {
+        if (handleValidation()) {
+            const useeer = await axios.post(driversignupRoute, Driver)
+            console.log(useeer.data.status, 'was the response status \n');
+            if (useeer.data.status === false) {
+                Alert.alert('the emailid  is already used','try with some other email id ');
+            }
+            if (useeer.data.status === true) {
+                navigating();
+            }
         }
-   
+    }
 
 
-   return (
+
+    return (
         <View style={styles.container}>
             <Text style={styles.title}>DRIVER SIGN-UP</Text>
-             <View style={styles.inputView}>
+            <View style={styles.inputView}>
                 <TextInput
                     style={styles.inputText}
                     placeholder="name"
                     placeholderTextColor="#003f5c"
-                    onChangeText={text =>{
-                        Driver.name= text
-                         setDriver({ ...Driver })}} />
+                    onChangeText={text => {
+                        Driver.name = text
+                        setDriver({ ...Driver })
+                    }} />
             </View>
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.inputText}
                     placeholder="Email"
                     placeholderTextColor="#003f5c"
-                    onChangeText={text =>{ 
+                    onChangeText={text => {
                         Driver.email = text
-                        setDriver({ ...Driver})}} />
+                        setDriver({ ...Driver })
+                    }} />
             </View>
             <View style={styles.inputView}>
                 <TextInput
@@ -84,18 +91,19 @@ const Driversignup= function({navigation}){
                     secureTextEntry
                     placeholder="Password"
                     placeholderTextColor="#003f5c"
-                    onChangeText={text =>{
+                    onChangeText={text => {
                         Driver.password = text
-                         setDriver({ ...Driver })}} />
+                        setDriver({ ...Driver })
+                    }} />
             </View>
-          
+
             <TouchableOpacity
-                onPress={()=>{settheDriver()}}
+                onPress={() => { settheDriver() }}
                 style={styles.loginBtn}>
                 <Text style={styles.loginText}>LOGIN </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={()=>{navigation.goBack('Driverlogin')}}>
+                onPress={() => { navigation.goBack('Driverlogin') }}>
                 <Text style={styles.forgotAndSignUpText}>Login Instead</Text>
             </TouchableOpacity>
         </View>

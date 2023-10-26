@@ -1,4 +1,4 @@
-import React, { useState, useEffect ,useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     StyleSheet,
     Text,
@@ -19,45 +19,50 @@ const Passengersignup = function ({ navigation }) {
         password: "",
     });
 
-    const handleValidation= () => {
-        const { username, email, password} = User;
-        if (username === "") {
-            Alert.alert("Email and Password is required.");
+    const handleValidation = () => {
+        const { username, email, password } = User;
+
+        const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+        const passwordRegex = /^[A-Za-z0-9._%-]{4,20}/;
+        const UserNameRegex = /^[A-Za-z0-9._%-]{4,20}/;
+
+        if (username === "" || !UserNameRegex.test(username)) {
+            Alert.alert("Enter Valid Email, Username and Password");
             return false;
-        } else if (password === "") {
-            Alert.alert("Email and Password is required.");
+        } else if (password === "" || !passwordRegex.test(password)) {
+            Alert.alert("Enter Valid Email, Username and Password");
             return false;
-        } else if(email === ""){
-            Alert.alert("Email and Password is required.");
+        } else if (email === "" || !emailRegex.test(email)) {
+            Alert.alert("Enter Valid Email, Username and Password");
             return false;
         }
         return true;
     };
 
-    function navigating(){
+    function navigating() {
         navigation.navigate('Passenger',
-              {
+            {
                 screen: 'Chooser',
                 params: {
                     CurrentUser: User.email
                 }
-            
-        });
+
+            });
     }
 
     async function settheUser() {
         console.log(User);
         if (handleValidation()) {
-      const dataa = await axios.post(passengersignupRoute, User );
-      
-        console.log(dataa)
-      if (dataa.data.status === false) {
-       Alert.alert(`'the emailid or password is alreaddy used`);
-      }
-      if( dataa.data.status === true) {
-        navigating();
-      }
-    }
+            const dataa = await axios.post(passengersignupRoute, User);
+
+            console.log(dataa)
+            if (dataa.data.status === false) {
+                Alert.alert(`'the emailid is already used`,'Try some other Email id ');
+            }
+            if (dataa.data.status === true) {
+                navigating();
+            }
+        }
     }
 
     return (
@@ -67,7 +72,7 @@ const Passengersignup = function ({ navigation }) {
                 <TextInput
                     style={styles.inputText}
                     placeholder="name"
-                    placeholderTextColor="#003f5c0"
+
                     onChangeText={text => {
                         User.name = text
                         setUser({ ...User })
@@ -77,7 +82,7 @@ const Passengersignup = function ({ navigation }) {
                 <TextInput
                     style={styles.inputText}
                     placeholder="Email"
-                    placeholderTextColor="#003f5c"
+
                     onChangeText={text => {
                         User.email = text
                         setUser({ ...User })
@@ -88,7 +93,7 @@ const Passengersignup = function ({ navigation }) {
                     style={styles.inputText}
                     secureTextEntry
                     placeholder="Password"
-                    placeholderTextColor="#003f5c"
+
                     onChangeText={text => {
                         User.password = text
                         setUser({ ...User })

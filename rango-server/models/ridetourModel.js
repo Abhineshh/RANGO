@@ -36,6 +36,12 @@ const rideSchema = new mongoose.Schema({
         type: Array,
         required: true,
     },
+    pickupName:{
+        type: String,
+    },
+    destinationName:{
+        type:String,
+    },
     driverCurrentLocation:{
         type:Array,
     },

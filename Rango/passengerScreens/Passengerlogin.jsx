@@ -22,11 +22,13 @@ const Passengerlogin = function ({ navigation }) {
     const handleValidation = () => {
         const password = User.password;
         const email = User.email;
-        if (password === "") {
-            Alert.alert("Email and Password is required.");
+        const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+        const passwordRegex = /^[A-Za-z0-9._%-]{4,20}/;
+        if (password === "" || !passwordRegex.test(password)) {
+            Alert.alert("Enter Valid Email and Password");
             return false;
-        } else if (email === "") {
-            Alert.alert("Email and Password is required.");
+        } else if (email === "" || !emailRegex.test(email)) {
+            Alert.alert("Enter Valid Email and Password");
             return false;
         }
         return true;
@@ -54,7 +56,7 @@ const Passengerlogin = function ({ navigation }) {
                     Alert.alert(`couldn't login`, 'the email or password is wrong');
                 }
                 if (useeer.data.status === true) {
-                   
+
                     navigating();
                 }
             }
@@ -82,7 +84,6 @@ const Passengerlogin = function ({ navigation }) {
                     style={styles.inputText}
                     secureTextEntry
                     placeholder="Password"
-                    placeholderTextColor="#003f5c"
                     onChangeText={text => {
                         User.password = text
                         setUser({ ...User })

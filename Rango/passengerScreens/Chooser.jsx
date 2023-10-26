@@ -32,6 +32,9 @@ const Chooser = function ({ route,navigation }) {
 
     const [pickup, setpickup] = useState([]);
     const [Destination, setDestination] = useState([]);
+
+    const [pickName,setpickName] = useState('');
+    const [destName,setdestName] = useState('');
   
     const [searchQueryPick, setSearchQueryPick] = useState('');
     const [searchQueryDest, setsearchQueryDest] = useState('');
@@ -89,6 +92,8 @@ const Chooser = function ({ route,navigation }) {
             Destination,
             riderEmail:route.params.CurrentUser,
             rideid,
+            pickName,
+            destName,
 
         });
         console.log(ridinator.data);
@@ -136,7 +141,10 @@ const Chooser = function ({ route,navigation }) {
                         return (
                             <TouchableOpacity
                                 key={index}
-                                onPress={() => {setpickup(searchResultsPick.coord);console.log(searchResultsPick.placename) }}>
+                                onPress={() => {setpickup(searchResultsPick.coord);
+                                console.log(searchResultsPick.placename);
+                                setpickName(searchResultsPick.placename);
+                                 }}>
 
                                 <Text style={styles.loginText}>{searchResultsPick.placename}</Text>
                             </TouchableOpacity>)
@@ -160,7 +168,10 @@ const Chooser = function ({ route,navigation }) {
                         return (
                             <TouchableOpacity
                                 key={index}
-                                onPress={() => {setDestination(searchResultsDest.coord);console.log(searchResultsDest.placename) }}>
+                                onPress={() => {setDestination(searchResultsDest.coord);
+                                console.log(searchResultsDest.placename) 
+                                setdestName(searchResultsDest.placename);
+                                }}>
 
                                 <Text style={styles.loginText}>{searchResultsDest.placename}</Text>
                             </TouchableOpacity>)

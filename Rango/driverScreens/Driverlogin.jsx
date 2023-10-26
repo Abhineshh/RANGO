@@ -11,49 +11,51 @@ import axios from 'axios';
 import { driverloginRoute } from '../APIroutes';
 
 const Driverlogin = function ({ navigation }) {
-    const [Driver, setDriver] = useState({ email: "", password: ""});
+    const [Driver, setDriver] = useState({ email: "", password: "" });
 
-     const handleValidation= () => {
-        const { email, password} = Driver;
-        if (password === "") {
+    const handleValidation = () => {
+        const { email, password } = Driver;
+        const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+        const passwordRegex = /^[A-Za-z0-9._%-]{4,20}/;
+        if (password === "" || !passwordRegex.test(password)) {
             Alert.alert("Email and Password is required.");
             return false;
-        } else if(email === ""){
+        } else if (email === "" || !emailRegex.test(email)) {
             Alert.alert("Email and Password is required.");
             return false;
         }
         return true;
     };
 
-    function navigating(){
+    function navigating() {
         console.log(Driver.email)
         navigation.navigate('Driver', {
-                screen: 'AvailRide',
-                params: {
-                    CurrentUser: Driver.email,
-                }
-            });
+            screen: 'AvailRide',
+            params: {
+                CurrentUser: Driver.email,
+            }
+        });
     }
 
 
-       async function gettheDriver(){
-            try{
-                if(handleValidation()){
-                    console.log(Driver.email)
-                const useeer = await axios.post(driverloginRoute,Driver)
-                console.log(useeer.data.status,useeer.data.msg , 'was the response status \n' );
-                  if(useeer.data.status=== false){
+    async function gettheDriver() {
+        try {
+            if (handleValidation()) {
+                console.log(Driver.email)
+                const useeer = await axios.post(driverloginRoute, Driver)
+                console.log(useeer.data.status, useeer.data.msg, 'was the response status \n');
+                if (useeer.data.status === false) {
                     Alert.alert(`couldn't login`);
                 }
-                if(useeer.data.status === true){
-                   
+                if (useeer.data.status === true) {
+
                     navigating();
                 }
-                }
-        }catch(e){
+            }
+        } catch (e) {
             console.log(e);
         }
-       }
+    }
 
     return (
         <View style={styles.container}>
@@ -81,7 +83,7 @@ const Driverlogin = function ({ navigation }) {
             </View>
 
             <TouchableOpacity
-                onPress={() => {gettheDriver()}}
+                onPress={() => { gettheDriver() }}
                 style={styles.loginBtn}>
                 <Text style={styles.loginText}>LOGIN </Text>
             </TouchableOpacity>
