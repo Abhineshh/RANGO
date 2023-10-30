@@ -16,37 +16,38 @@ const PassengerDetails = function ({ route , navigation}) {
     const [dcoords, setdcoords] = useState('');
     const [distance, setdistance] = useState('');
     const [otp, setotp] = useState('');
-    const [price,setprice] = useState('');
     const [driveremail, setdriveremail] = useState('');
     const [gotten, changegotten] = useState(false);
 
     useEffect(() => {
-        getData()
+        getData();
 
-    }, []);
+    },[]);
 
     async function geocoding(thecoord1, thecoord2) {
-        console.log(thecoord1, '  ', thecoord2)
-        const names = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${thecoord1},${thecoord2}.json?access_token=${MAPBOX_API_KEY}`);
-        const placename = names.data.features;
-        console.log('placename', placename)
-        const ding = placename.map((name) => {
-            if (name['center'][0] == thecoord1 && name['center'][1] == thecoord2) {
-                return name['place_name']
+        console.log('the getCoords', thecoord1, thecoord2);
+        console.log(thecoord1[0], "   ", thecoord1[1], "    ", thecoord2[0], "    ", thecoord2[1]);
+        const responsedata = await axios.get(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/${thecoord1[0]},${thecoord1[1]};${thecoord2[0]},${thecoord2[1]}?access_token=${MAPBOX_API_KEY}`);
+        console.log("sing ring bing", responsedata.data, 'i am ultra legend');
+        {/*
+      const response = await axios.get(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?approaches=curb;curb;curb&access_token=${MAPBOX_API_KEY}`);
+      
+      console.log(response,"\n ding indg \n");
+    */}
+        console.log(responsedata.data.destinations)
+        const dis = (responsedata.data.destinations).map((zing) => {
+            console.log(zing.distance);
+            if (zing.distance > 0) {
+                return zing.distance;
             }
-            else {
-                return 'nil';
-            }
+        })
+        let actualdistance =0;
+        dis.forEach(element => {
+            console.log('ditanceeee',element)
+            actualdistance += Math.round(element);
         });
-        let actualname;
-        for (const value of ding) {
-            if (value != 'nil') {
-                actualname = value;
-                break;
-            }
-        }
-        console.log('the name', actualname)
-        return actualname;
+
+        return actualdistance;
     }
 
 
@@ -62,16 +63,20 @@ const PassengerDetails = function ({ route , navigation}) {
             const result = response.data;
             console.log('ddd', result.status);
             if (result.status === true) {
-                const [thecoord1, thecoord2] = result.datas.destinationLocation;
-                const dest = await geocoding(...result.datas.destinationLocation);
+               
+                const dest = result.datas.destinationName;
                 console.log('name of the place', dest)
                 setdcoords(dest);
-                const pick =await geocoding(...result.datas.pickupLocation)
+                const pick =result.datas.pickupName;
                 console.log(pick)
                 setpcoords(pick);
                 setotp(result.datas.sotp);
                 setdriveremail(result.datas.driverEmail);
-                let d = result.datas.distance
+
+                const distence = await geocoding(result.datas["pickupLocation"], result.datas["destinationLocation"]);
+                console.log('distaaance', distence);
+                setdistance(distence);
+
                 console.log(dcoords, pcoords, otp, driveremail, gotten)
                 changegotten(true);
                 return true;
@@ -111,7 +116,7 @@ const PassengerDetails = function ({ route , navigation}) {
                     </View>
                     <View style={styles.card}>
                         <Text style={styles.texter}>Start OTP : {otp}</Text>
-                        <Text style={styles.texter}>price : {price}</Text>
+                       
                         <Text style={styles.texter}>Distance: {distance}</Text>
                     </View>
                     <View style={styles.card}>

@@ -27,7 +27,7 @@ const PassengerMap = () => {
           }
         });
         const result = response.data;
-        console.log(result.status);
+        console.log(result);
         if (result.status === true) {
           const currentLocation = result.datas.driverCurrentLocation;
           console.log(currentLocation);

@@ -1,0 +1,41 @@
+{
+    "code": "Ok",
+    "destinations": [
+        {
+            "distance": 0,
+            "location": [Array
+            ],
+            "name": ""
+        },
+        {
+            "distance": 14.203186427,
+            "location": [Array
+            ],
+            "name": ""
+        }
+    ],
+    "durations": [
+        [
+            0,
+            2125.2
+        ],
+        [
+            2072,
+            0
+        ]
+    ],
+    "sources": [
+        {
+            "distance": 0,
+            "location": [Array
+            ],
+            "name": ""
+        },
+        {
+            "distance": 14.203186427,
+            "location": [Array
+            ],
+            "name": ""
+        }
+    ]
+}

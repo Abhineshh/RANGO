@@ -37,8 +37,8 @@ module.exports.Chooser = async (req, res, next) => {
             eotp: endotp,
             pickupLocation: pickup,
             destinationLocation: destination,
-            pickupName:pickn,
-            destinationName:destn,
+            pickupName: pickn,
+            destinationName: destn,
             price: 0,
             distance: 0,
             Rating: 0,
@@ -122,22 +122,25 @@ module.exports.EndRideOTP = async (req, res, next) => {
     try {
         console.log(req.body)
         const randoid = req.body.rangoid;
-        const otp = req.body.stotp;
-        const didStart = await RideTour.findOne({ randoId: { $eq: randoid } }).where('rideStart').equals(true);
-        if (didStart) {
-            const started = await RideTour.findOne({ rangoId: { $eq: randoid } }).where('eotp').equals(otp);
-            console.log(started)
-            if (started) {
-                await RideTour.updateOne({ rangoId: { $eq: randoid } }, { $set: { rideEnd: true } });
-                res.json({ status: true, started })
-            }
-            if (!started) {
-                res.json({ status: false, started })
-            }
+        const otp = Number(req.body.stotp);
+
+        console.log(typeof(otp))
+        const didStart = await RideTour.findOne({ rangoId: { $eq: randoid } }).where('rideStart').equals(true);
+        console.log('ding',didStart)
+        if (didStart == null) {
+            return res.json({ status: 'didnotstart', })
         }
-        if (!didStart) {
-            res.json({ status: 'didnotstart', })
+        const started = await RideTour.findOne({ rangoId: { $eq: randoid } }).where('eotp').equals(otp);
+        console.log(started)
+        if (started != null) {
+            await RideTour.updateOne({ rangoId: { $eq: randoid } }, { $set: { rideEnd: true } });
+            res.json({ status: true, started })
         }
+        if (started == null) {
+            res.json({ status: false, started })
+        }
+
+
     } catch (err) {
         console.log('StartRideOTPRouter: ', err)
     }

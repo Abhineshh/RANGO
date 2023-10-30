@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text, StyleSheet, TouchableOpacity,Alert } from 'react-native';
+import { View, Button, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { DriverCancel, DriverDetailsRoute } from '../APIroutes';
 import { MAPBOX_API_KEY } from '../config';
 import axios from 'axios';
@@ -22,56 +22,60 @@ const DriverDetails = function ({ route, navigation }) {
 
     useEffect(() => {
         getData();
-       
-    }, []);
+
+    },[]);
 
     async function geocoding(thecoord1, thecoord2) {
-        console.log(thecoord1, '     ', thecoord2)
-        console.log(typeof (thecoord1))
-        const names = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${thecoord1},${thecoord2}.json?access_token=${MAPBOX_API_KEY}`)
-        const placename = names.data.features;
-        const ding = placename.map((name) => {
-            if (name['center'][0] == thecoord1 && name['center'][1] == thecoord2) {
-                return name['place_name']
+        console.log('the getCoords', thecoord1, thecoord2);
+        console.log(thecoord1[0], "   ", thecoord1[1], "    ", thecoord2[0], "    ", thecoord2[1]);
+        const responsedata = await axios.get(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/${thecoord1[0]},${thecoord1[1]};${thecoord2[0]},${thecoord2[1]}?access_token=${MAPBOX_API_KEY}`);
+        console.log("sing ring bing", responsedata.data, 'i am ultra legend');
+        {/*
+      const response = await axios.get(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?approaches=curb;curb;curb&access_token=${MAPBOX_API_KEY}`);
+      
+      console.log(response,"\n ding indg \n");
+    */}
+        console.log(responsedata.data.destinations)
+        const dis = (responsedata.data.destinations).map((zing) => {
+            console.log(zing.distance);
+            if (zing.distance > 0) {
+                return zing.distance;
             }
-            else {
-                return 'bling';
-            }
+        })
+        let actualdistance =0;
+        dis.forEach(element => {
+            console.log('ditanceeee',element)
+            actualdistance += Math.round(element);
         });
-        let actualname;
-        for (const value of ding) {
-            if (value != 'bling') {
-                actualname = value;
-                break;
-            }
-        }
-        console.log('the name', actualname)
-        return actualname;
+
+        return actualdistance;
     }
 
     async function getData() {
         try {
             console.log('ding ding', Rangorideid);
             const a = Rangorideid;
-            console.log(a)
             const response = await axios.get(DriverDetailsRoute, {
                 params: {
                     rideid: a,
                 }
             });
             const result = response.data;
-            console.log(result.status);
+            console.log(result);
             if (result.status === true) {
-                console.log('ningm ingklk',result.datas.destinationLocation);
-                const dest = await geocoding(...result.datas.destinationLocation)
-                console.log(dest)
+
+                const dest = result.datas.destinationName;
                 setdcoords(dest);
-                const pick = await geocoding(...result.datas.pickupLocation)
-                console.log(pick)
+                const pick = result.datas.pickupName;
                 setpcoords(pick);
                 setotp(result.datas.eotp);
                 setrideremail(result.datas.riderEmail);
+
+                const distence = await geocoding(result.datas["pickupLocation"], result.datas["destinationLocation"]);
+                console.log('distaaance', distence);
+                setdistance(distence);
                 console.log(dcoords, pcoords, otp, rideremail, gotten)
+
                 changegotten(true);
                 return true;
             }
@@ -80,28 +84,28 @@ const DriverDetails = function ({ route, navigation }) {
         }
     }
 
-    async function EndRide(){
-        try{
-            const response = await axios.post(DriverCancel,{
+    async function EndRide() {
+        try {
+            const response = await axios.post(DriverCancel, {
                 Rangorideid,
             })
 
-            
-             if(response.data.status == true){
+
+            if (response.data.status == true) {
                 navigation.navigate('DriverReviews');
             }
-            if(response.data.status == false){
+            if (response.data.status == false) {
                 console.log('Cancellation Unsuccessfull');
-                 Alert.alert(`couldn't End the Ride`, 'The Passenger Has not Ended the Ride');
+                Alert.alert(`couldn't End the Ride`, 'The Passenger Has not Ended the Ride');
             }
 
-        }catch(err){
+        } catch (err) {
             console.log('the cancellation error', err);
         }
     }
 
     return (
-       <View style={styles.container}>
+        <View style={styles.container}>
             {gotten ? (
                 <View>
                     <View style={styles.card}>
@@ -109,7 +113,7 @@ const DriverDetails = function ({ route, navigation }) {
                         <Text style={styles.texter} >To : {dcoords}</Text>
                     </View>
                     <View style={styles.card}>
-                        <Text style={styles.texter}>Distance:{}</Text>
+                        <Text style={styles.texter}>Distance: {distance }km</Text>
                         <Text style={styles.texter}>End OTP : {otp}</Text>
                     </View>
                     <View style={styles.card}>
@@ -119,8 +123,8 @@ const DriverDetails = function ({ route, navigation }) {
                     <View>
                         <TouchableOpacity
                             style={styles.loginBtn}
-                            onPress={()=>{EndRide()}}
-                            >
+                            onPress={() => { EndRide() }}
+                        >
                             <Text style={styles.loginText}>END THE RIDE</Text>
                         </TouchableOpacity>
                     </View>
@@ -138,7 +142,7 @@ const DriverDetails = function ({ route, navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-         height:'100%',
+        height: '100%',
         backgroundColor: '#BBB',
         alignItems: 'center',
         justifyContent: 'flex-start',
@@ -148,7 +152,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         marginTop: 25,
         marginBottom: 25,
-         height: 'fitContent',
+        height: 'fitContent',
         width: 'fitContent',
         borderRadius: 10,
         padding: 15,
