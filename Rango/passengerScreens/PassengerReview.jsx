@@ -36,7 +36,10 @@ const PaassengerReview = function ({ navigation }) {
       if (response.data.status == true) {
         console.log("it works")
         Alert.alert('Posted', 'The Review was posted Successfully');
-        navigation.popToTop();
+        navigation.reset({
+            index:0,
+            routes:[{name:'Chooser'}]
+        });
       }
       if (response.data.status == false) {
         console.log('it did not work');

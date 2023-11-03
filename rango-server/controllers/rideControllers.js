@@ -63,18 +63,17 @@ module.exports.RiderWait = async (req, res, next) => {
         console.log("the loading Screen", req.query.rideid)
         const selected = await RideTour.where("rangoId").equals(data).findOne({ driverEmail: { $ne: 'nil' } })
         console.log('zing', selected)
-        if (!selected) {
+        if (selected == null) {
             res.json({ status: false });
             console.log('dingding')
         }
-        if (selected) {
-            const d = await RideTour.findOne({ driverEmail: { $eq: 'nil' } })
-            if (!d) {
+        if (selected != null) {
+            
+            console.log('it works')
+            
                 res.json({ status: true, selected })
-            }
-            if (d) {
-                res.json({ status: false })
-            }
+            
+           
         }
     } catch (err) {
         console.log(err)
@@ -310,6 +309,10 @@ module.exports.DriverCancel = async (req, res, next) => {
         console.log('Ending the Ride by Driver', req.body);
         const randoid = req.body.Rangorideid;
         const check = await RideTour.findOne({ rangoId: { $eq: randoid } }).where('rideEnd').equals(true);
+        const becheck = await RideTour.findOne({rangoId:{$eq:randoid}}).where('rideStart').equals(false);
+        if(becheck != null){
+            res.json({status : true})
+        }
         if (check) {
             res.json({ status: true });
         }

@@ -29,8 +29,10 @@ const DriverMap = () => {
 
 
   function UserEffecter() {
-      getData();
+      let i = getData();
+      if(i){
       getPermissionLocation();
+      }
       
     }
    

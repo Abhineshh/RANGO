@@ -110,7 +110,10 @@ const Chooser = function ({ route,navigation }) {
             CurrentUser: '',
             RangoRideId: '',
         });
-         navigation.popToTop();
+         navigation.reset({
+            index:0,
+            routes:[{name:'Passengerlogin'}]
+        });
     }
 
     return (

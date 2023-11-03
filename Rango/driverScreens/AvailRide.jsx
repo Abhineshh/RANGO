@@ -17,28 +17,7 @@ const AvailRide = function ({ route, navigation }) {
         getRide();
     }, []);
 
-    async function geocoding(thecoord1, thecoord2) {
-        console.log(thecoord1, '  czxczxc   ', thecoord2)
-        const names = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${thecoord1},${thecoord2}.json?access_token=${MAPBOX_API_KEY}`)
-        const placename = names.data.features;
-        const ding = await placename.map((name) => {
-            if (name['center'][0] == thecoord1 && name['center'][1] == thecoord2) {
-                return name['place_name']
-            }
-            else {
-                return 'bling';
-            }
-        });
-        let actualname;
-        for (const value of ding) {
-            if (value != 'bling') {
-                actualname = value;
-            }
-        }
-
-        console.log('the name', actualname)
-        return actualname;
-    }
+    
 
 
 
@@ -111,7 +90,10 @@ const AvailRide = function ({ route, navigation }) {
             CurrentUser: '',
             RangoRideId: '',
         });
-        navigation.popToTop();
+        navigation.reset({
+            index:0,
+            routes:[{name:'Driverlogin'}]
+        });
     }
     return (
         <View style={styles.otter}>

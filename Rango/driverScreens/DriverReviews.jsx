@@ -38,7 +38,10 @@ import { DriverReviewRoute } from '../APIroutes';
     }
 
     function navigator(){
-        navigation.popToTop();
+        navigation.reset({
+            index:0,
+            routes:[{name:'AvailRide'}]
+        });
     }
 
      function logoutfunction(){
@@ -46,7 +49,10 @@ import { DriverReviewRoute } from '../APIroutes';
             CurrentUser: '',
             RangoRideId: '',
         });
-          navigation.navigate('Driverlogin')
+         navigation.reset({
+            index:0,
+            routes:[{name:'Driverlogin'}]
+        });
     }
     return(
         <View style={styles.container}>

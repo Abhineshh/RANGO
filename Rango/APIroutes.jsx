@@ -1,5 +1,5 @@
-export const server = "http://10.0.2.2:5000";
-
+export const ser = "http://10.0.2.2:5000";
+export const server = "http://192.168.9.123:5000"
 export const passengerloginRoute = `${server}/riderauth/passengerlogin`;
 export const passengersignupRoute = `${server}/riderauth/passengersignup`;
 

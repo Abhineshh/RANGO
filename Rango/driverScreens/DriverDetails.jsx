@@ -71,9 +71,12 @@ const DriverDetails = function ({ route, navigation }) {
                 setotp(result.datas.eotp);
                 setrideremail(result.datas.riderEmail);
 
-                const distence = await geocoding(result.datas["pickupLocation"], result.datas["destinationLocation"]);
+               {/* const distence = await geocoding(result.datas["pickupLocation"], result.datas["destinationLocation"]);
+               setdistance(distence);
                 console.log('distaaance', distence);
-                setdistance(distence);
+                */}
+               
+                
                 console.log(dcoords, pcoords, otp, rideremail, gotten)
 
                 changegotten(true);
@@ -97,6 +100,9 @@ const DriverDetails = function ({ route, navigation }) {
             if (response.data.status == false) {
                 console.log('Cancellation Unsuccessfull');
                 Alert.alert(`couldn't End the Ride`, 'The Passenger Has not Ended the Ride');
+            }
+            if(response.data.status == 'true1'){
+                
             }
 
         } catch (err) {
