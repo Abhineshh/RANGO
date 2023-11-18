@@ -6,6 +6,7 @@ import { RiderDetailsRoute } from '../APIroutes';
 import axios from 'axios';
 import { useSharedParams } from '../ParamContext';
 
+
 Mapbox.setAccessToken(MAPBOX_API_KEY);
 
 const PassengerMap = () => {
@@ -51,7 +52,7 @@ const PassengerMap = () => {
       <View style={styles.container}>
         <Mapbox.MapView style={styles.map}>
           <Camera zoomLevel={4} centerCoordinate={coords} />
-          <PointAnnotation id='the location' coordinate={coords} />
+          <PointAnnotation id='the location' coordinate={coords}/>
 
         </Mapbox.MapView>
       </View>

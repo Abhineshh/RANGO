@@ -8,6 +8,7 @@ import { useSharedParams } from '../ParamContext';
 import Geolocation from '@react-native-community/geolocation';
 import { showLocation } from 'react-native-map-link';
 
+
 Mapbox.setAccessToken(MAPBOX_API_KEY);
 
 const DriverMap = () => {
@@ -96,7 +97,7 @@ const DriverMap = () => {
       <View style={styles.container}>
         <MapView style={styles.map}>
           <Camera zoomLevel={4} centerCoordinate={coords} />
-          <PointAnnotation id='the location' coordinate={coords} />
+          <PointAnnotation id='the location' coordinate={coords}/>
           <PointAnnotation id='the pick location' coordinate={pcoords} />
           <PointAnnotation id='the dest location' coordinate={dcoords} />
         </MapView>
