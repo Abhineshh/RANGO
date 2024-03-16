@@ -6,7 +6,7 @@ module.exports.DBConnect = async (DB_URL)=>{
             dbName:'Rango',
         }
     await mongoose.connect(DB_URL,dbOptions);
-    console.log("the database was connected");
+    console.log("the database wddas connected");
     }catch(err){
         console.log(err);
     }
